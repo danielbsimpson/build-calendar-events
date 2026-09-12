@@ -41,7 +41,7 @@ class EmailSender:
             maintype="text",
             subtype="calendar",
             filename=ics_path.name,
-            params={"method": "PUBLISH", "name": ics_path.name},
+            params={"method": self.config.invite_method, "name": ics_path.name},
         )
         return msg
 

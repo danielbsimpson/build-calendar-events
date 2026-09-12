@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from ics import Calendar
@@ -31,6 +31,8 @@ def build_calendar(
     sequence: int = 0,
     method: str = "PUBLISH",
     color: str | None = None,
+    organizer: str | None = None,
+    attendee: str | None = None,
 ) -> Calendar:
     """Build a single-event iCalendar object from an Event."""
     cal = Calendar()
@@ -54,6 +56,33 @@ def build_calendar(
         cal.extra.append(ContentLine(name="COLOR", value=color))
         ics_event.extra.append(ContentLine(name="COLOR", value=color))
     ics_event.extra.append(ContentLine(name="CATEGORIES", value="Sports"))
+    if method == "REQUEST":
+        # A REQUEST is a real invitation: iOS shows Accept/Decline and adds it
+        # to the default calendar. Needs DTSTAMP + ORGANIZER + ATTENDEE.
+        stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        ics_event.extra.append(ContentLine(name="DTSTAMP", value=stamp))
+        ics_event.extra.append(ContentLine(name="STATUS", value="CONFIRMED"))
+        if organizer:
+            ics_event.extra.append(
+                ContentLine(
+                    name="ORGANIZER",
+                    params={"CN": ["Sports Calendar"]},
+                    value=f"mailto:{organizer}",
+                )
+            )
+        if attendee:
+            ics_event.extra.append(
+                ContentLine(
+                    name="ATTENDEE",
+                    params={
+                        "CN": [attendee],
+                        "ROLE": ["REQ-PARTICIPANT"],
+                        "PARTSTAT": ["NEEDS-ACTION"],
+                        "RSVP": ["TRUE"],
+                    },
+                    value=f"mailto:{attendee}",
+                )
+            )
     cal.events.add(ics_event)
     return cal
 
@@ -65,11 +94,20 @@ def write_ics(
     sequence: int = 0,
     method: str = "PUBLISH",
     color: str | None = None,
+    organizer: str | None = None,
+    attendee: str | None = None,
 ) -> Path:
     """Serialize an event to a .ics file and return its path."""
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     path = out_dir / f"{event.uid}.ics"
-    calendar = build_calendar(event, sequence=sequence, method=method, color=color)
+    calendar = build_calendar(
+        event,
+        sequence=sequence,
+        method=method,
+        color=color,
+        organizer=organizer,
+        attendee=attendee,
+    )
     path.write_text(calendar.serialize(), encoding="utf-8")
     return path

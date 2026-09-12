@@ -99,6 +99,8 @@ def run(
                 sequence=sequence,
                 method=config.email.invite_method,
                 color=config.event_color,
+                organizer=config.email.from_addr,
+                attendee=config.email.to,
             )
             logger.info("Prepared invite: %s -> %s", event.title, ics_path.name)
 
