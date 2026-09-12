@@ -30,11 +30,13 @@ scaffolding for everything in Milestone 0 already exists as stubs.
   - [x] Choose data source (API if available, else HTML scrape of the schedule)
   - [x] Parse event name, date/time, location, main card start
 - [x] End-to-end manual run: scrape → dedup → build `.ics` → email to self
-- [ ] Verify generated `.ics` imports cleanly into Google Calendar / Apple Calendar / Outlook
+- [x] Verify generated `.ics` imports cleanly into Google Calendar / Apple Calendar / Outlook
   - Apple Calendar / iPhone testing (2026-09-12):
     - [x] Individual `PUBLISH` invites for this weekend's events — UFC (Silva vs Delgado) and F1 (Spanish GP) — imported correctly.
     - [ ] Batch send of all upcoming UFC + F1 events (`PUBLISH`): emails and `.ics` arrived and previewed correctly, but tapping "Done" did **not** add them (a PUBLISH preview needs "Add All to Calendar", not "Done"). **Failed test.**
     - [x] Switched to `METHOD:REQUEST` invitations (Accept/Decline): one future UFC test (Van vs Pantoja 2) accepted and added reliably — but lands in the default calendar and can't be moved to the colored "Sports" calendar (see BUG-001).
+    - [x] Reverted to `PUBLISH` and made the `.ics` fully RFC 5545-compliant (see BUG-002): fixed `\r\r\n` line endings, added mandatory `DTSTAMP`, folded long lines to 75 octets, and hoisted `METHOD` ahead of `BEGIN:VEVENT`.
+    - [x] Root cause of "nothing saves" isolated: the **Gmail iOS app** (and Files) won't pass a `text/calendar` attachment to Calendar; opening the same email in the **native iOS Mail app** exposes "Add to Calendar" and works.
 - [x] Basic unit tests for `ics`, `store`, and each source's parser (with fixtures)
 - [x] Sensible logging and clear console summary of what was sent
 
@@ -103,6 +105,24 @@ scaffolding for everything in Milestone 0 already exists as stubs.
   - Planned fix: deliver via a **subscribed calendar feed** (webcal / ICS URL)
     whose color is set once on the device, avoiding the per-invite limitation
     entirely (tracked in Milestone 3).
+
+- **BUG-002 — `.ics` not RFC 5545-compliant; events wouldn't save on iOS (resolved 2026-09-12).**
+  Generated invites previewed on iPhone but couldn't be saved. Four spec
+  violations were found and fixed in `src/calendar_events/ics.py`
+  (+ `email_sender.py`):
+  - **Line endings:** `Path.write_text` on Windows re-translated ics.py's `\r\n`
+    into `\r\r\n`. Fixed by writing with `newline=""` and attaching the file as
+    raw bytes (`read_bytes`) so CRLF survives.
+  - **Missing `DTSTAMP`:** required on every `VEVENT`, but was only emitted for
+    `METHOD:REQUEST`. Now added unconditionally.
+  - **Unfolded long lines:** `DESCRIPTION`/`LOCATION` exceeded the 75-octet limit.
+    Added UTF-8-aware folding (§3.1) that won't split multi-byte characters.
+  - **`METHOD` placement:** ics.py emitted it after the event; it's now hoisted to
+    a calendar-level property before `BEGIN:VEVENT`.
+  - All handled by a new `serialize_calendar()` post-processor; covered by tests.
+  - **Note:** the file was compliant after these fixes, but the *actual* blocker
+    for adding events was client-side — the **Gmail iOS app / Files** don't offer
+    "Add to Calendar"; the **native iOS Mail app** does.
 
 ## Known decisions
 

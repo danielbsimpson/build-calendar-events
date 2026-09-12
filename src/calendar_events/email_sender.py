@@ -35,9 +35,10 @@ class EmailSender:
             body_lines.append(f"More info: {event.url}")
         msg.set_content("\n".join(body_lines))
 
-        ics_content = ics_path.read_text(encoding="utf-8")
+        # Read as bytes to preserve the .ics CRLF line endings exactly.
+        ics_content = ics_path.read_bytes()
         msg.add_attachment(
-            ics_content.encode("utf-8"),
+            ics_content,
             maintype="text",
             subtype="calendar",
             filename=ics_path.name,

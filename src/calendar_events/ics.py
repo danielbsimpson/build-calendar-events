@@ -56,11 +56,12 @@ def build_calendar(
         cal.extra.append(ContentLine(name="COLOR", value=color))
         ics_event.extra.append(ContentLine(name="COLOR", value=color))
     ics_event.extra.append(ContentLine(name="CATEGORIES", value="Sports"))
+    # DTSTAMP is REQUIRED by RFC 5545 for every VEVENT; ics 0.7.x omits it.
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    ics_event.extra.append(ContentLine(name="DTSTAMP", value=stamp))
     if method == "REQUEST":
         # A REQUEST is a real invitation: iOS shows Accept/Decline and adds it
-        # to the default calendar. Needs DTSTAMP + ORGANIZER + ATTENDEE.
-        stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-        ics_event.extra.append(ContentLine(name="DTSTAMP", value=stamp))
+        # to the default calendar. Needs ORGANIZER + ATTENDEE.
         ics_event.extra.append(ContentLine(name="STATUS", value="CONFIRMED"))
         if organizer:
             ics_event.extra.append(
@@ -87,6 +88,69 @@ def build_calendar(
     return cal
 
 
+# Calendar-level property order (RFC 5545 §3.6); METHOD must precede VEVENT.
+_CAL_PROP_ORDER = {"VERSION": 0, "PRODID": 1, "CALSCALE": 2, "METHOD": 3}
+
+
+def _fold_line(line: str) -> list[str]:
+    """Fold a content line to <=75 octets per RFC 5545 §3.1, UTF-8 aware."""
+    if len(line.encode("utf-8")) <= 75:
+        return [line]
+    segments: list[bytes] = []
+    current = b""
+    first = True
+    for char in line:
+        encoded = char.encode("utf-8")
+        # Continuation lines carry a leading space, so cap them one octet lower.
+        cap = 75 if first else 74
+        if len(current) + len(encoded) > cap:
+            segments.append(current)
+            current = encoded
+            first = False
+        else:
+            current += encoded
+    segments.append(current)
+    return [
+        seg.decode("utf-8") if i == 0 else " " + seg.decode("utf-8")
+        for i, seg in enumerate(segments)
+    ]
+
+
+def _reorder_calendar_lines(lines: list[str]) -> list[str]:
+    """Hoist calendar-level properties (esp. METHOD) ahead of the VEVENT block."""
+    cal_props: list[str] = []
+    event_block: list[str] = []
+    in_event = False
+    for line in lines:
+        if line in ("BEGIN:VCALENDAR", "END:VCALENDAR"):
+            continue
+        if line == "BEGIN:VEVENT":
+            in_event = True
+        if in_event:
+            event_block.append(line)
+        else:
+            cal_props.append(line)
+        if line == "END:VEVENT":
+            in_event = False
+    cal_props.sort(key=lambda p: _CAL_PROP_ORDER.get(p.split(":", 1)[0].split(";", 1)[0], 9))
+    return ["BEGIN:VCALENDAR", *cal_props, *event_block, "END:VCALENDAR"]
+
+
+def serialize_calendar(calendar: Calendar) -> str:
+    """Serialize with METHOD hoisted, long lines folded, and CRLF endings.
+
+    ics 0.7.x emits METHOD after the event and never folds lines, both of which
+    trip up strict parsers such as Apple Calendar.
+    """
+    raw = calendar.serialize().replace("\r\n", "\n").replace("\r", "\n")
+    lines = [ln for ln in raw.split("\n") if ln != ""]
+    ordered = _reorder_calendar_lines(lines)
+    folded: list[str] = []
+    for line in ordered:
+        folded.extend(_fold_line(line))
+    return "\r\n".join(folded) + "\r\n"
+
+
 def write_ics(
     event: Event,
     out_dir: str | Path,
@@ -109,5 +173,6 @@ def write_ics(
         organizer=organizer,
         attendee=attendee,
     )
-    path.write_text(calendar.serialize(), encoding="utf-8")
+    # newline="" keeps our serializer's CRLF intact (Windows would add \r\r\n).
+    path.write_text(serialize_calendar(calendar), encoding="utf-8", newline="")
     return path
