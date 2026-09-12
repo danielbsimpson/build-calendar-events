@@ -4,6 +4,11 @@
 # How far ahead to look for events (in days). Events beyond this are ignored.
 look_ahead_days: 120
 
+# Default reminders (minutes before start) added to every event as VALARMs.
+# Set to an empty list ([]) to disable reminders.
+default_alarms:
+  - 60
+
 # Which sources to run. Names must match registered sources
 # (see src/calendar_events/sources/base.py).
 sources:
@@ -20,6 +25,9 @@ email:
   to: you@example.com
   from: you@example.com
   subject_prefix: "[Sports Calendar] "
+  # iCalendar METHOD written into the .ics. Use PUBLISH for a subscribe-style
+  # feed, or REQUEST if you want clients to treat messages as meeting invites.
+  invite_method: PUBLISH
   smtp:
     host: smtp.gmail.com
     port: 587

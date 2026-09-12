@@ -23,6 +23,7 @@ class EmailConfig:
     to: str = ""
     from_addr: str = ""
     subject_prefix: str = ""
+    invite_method: str = "PUBLISH"
     smtp: SMTPConfig = field(default_factory=SMTPConfig)
 
 
@@ -34,6 +35,7 @@ class Config:
     store_file: Path = Path("data/sent_events.json")
     email: EmailConfig = field(default_factory=EmailConfig)
     source_options: dict = field(default_factory=dict)
+    default_alarms: tuple[int, ...] = (60,)
 
     def options_for(self, source_name: str) -> dict:
         """Return the per-source options block, or an empty dict."""
@@ -67,6 +69,7 @@ def load_config(path: str | Path = "config.yaml") -> Config:
         to=os.getenv("EMAIL_TO", email_raw.get("to", "")),
         from_addr=os.getenv("EMAIL_FROM", email_raw.get("from", "")),
         subject_prefix=email_raw.get("subject_prefix", ""),
+        invite_method=str(email_raw.get("invite_method", "PUBLISH")).upper(),
         smtp=smtp,
     )
 
@@ -77,6 +80,7 @@ def load_config(path: str | Path = "config.yaml") -> Config:
         store_file=Path(raw.get("store_file", "data/sent_events.json")),
         email=email,
         source_options=raw.get("source_options", {}) or {},
+        default_alarms=tuple(raw.get("default_alarms", [60]) or ()),
     )
 
 

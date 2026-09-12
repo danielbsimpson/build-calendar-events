@@ -24,3 +24,18 @@ def test_resolved_end_defaults_to_two_hours(sample_event):
         source="test", title="No end", start=sample_event.start, external_id="z"
     )
     assert (no_end.resolved_end - no_end.start).total_seconds() == 2 * 3600
+
+
+def test_content_hash_stable_for_identical_content(sample_event):
+    from dataclasses import replace
+
+    same = replace(sample_event)
+    assert sample_event.content_hash == same.content_hash
+
+
+def test_content_hash_changes_when_start_changes(sample_event):
+    from dataclasses import replace
+    from datetime import timedelta
+
+    moved = replace(sample_event, start=sample_event.start + timedelta(hours=1))
+    assert moved.content_hash != sample_event.content_hash

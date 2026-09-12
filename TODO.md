@@ -21,28 +21,33 @@ scaffolding for everything in Milestone 0 already exists as stubs.
 
 ## Milestone 1 — MVP (manual run)
 
-- [ ] Implement the **F1** source using a public API (Ergast / Jolpica)
-  - [ ] Map race + session times (practice, qualifying, sprint, race) to events
-  - [ ] Correct timezone handling (store UTC, let the calendar localize)
-- [ ] Implement the **UFC** source
-  - [ ] Choose data source (API if available, else HTML scrape of the schedule)
-  - [ ] Parse event name, date/time, location, main card start
-- [ ] End-to-end manual run: scrape → dedup → build `.ics` → email to self
+> Implementation plan: [plan/feature-mvp-sources-1.md](plan/feature-mvp-sources-1.md)
+
+- [x] Implement the **F1** source using a public API (Ergast / Jolpica)
+  - [x] Map race + session times (practice, qualifying, sprint, race) to events
+  - [x] Correct timezone handling (store UTC, let the calendar localize)
+- [x] Implement the **UFC** source
+  - [x] Choose data source (API if available, else HTML scrape of the schedule)
+  - [x] Parse event name, date/time, location, main card start
+- [x] End-to-end manual run: scrape → dedup → build `.ics` → email to self
 - [ ] Verify generated `.ics` imports cleanly into Google Calendar / Apple Calendar / Outlook
-- [ ] Basic unit tests for `ics`, `store`, and each source's parser (with fixtures)
-- [ ] Sensible logging and clear console summary of what was sent
+- [x] Basic unit tests for `ics`, `store`, and each source's parser (with fixtures)
+- [x] Sensible logging and clear console summary of what was sent
 
 ---
 
 ## Milestone 2 — Robustness & polish
 
-- [ ] Retry/backoff and timeouts on all network calls
-- [ ] Graceful handling when a single source fails (don't abort the whole run)
-- [ ] Respect `robots.txt` and add polite rate limiting / user-agent
-- [ ] Configurable look-ahead window (e.g. only events in the next N months)
+> Implementation plan: [plan/feature-robustness-2.md](plan/feature-robustness-2.md)
+
+- [x] Retry/backoff and timeouts on all network calls
+- [x] Graceful handling when a single source fails (don't abort the whole run)
+- [x] Respect `robots.txt` and add polite rate limiting / user-agent
+- [x] Configurable look-ahead window (e.g. only events in the next N months)
 - [ ] Rich event details: location, broadcaster, card/session breakdown, reminders/alarms
-- [ ] De-dup by stable content hash so rescheduled events send an update, not a duplicate
-- [ ] Optional: emit `METHOD:REQUEST` invites vs plain `PUBLISH` events
+      — reminders/alarms done; content enrichment: [plan/feature-event-enrichment-1.md](plan/feature-event-enrichment-1.md)
+- [x] De-dup by stable content hash so rescheduled events send an update, not a duplicate
+- [x] Optional: emit `METHOD:REQUEST` invites vs plain `PUBLISH` events
 
 ---
 

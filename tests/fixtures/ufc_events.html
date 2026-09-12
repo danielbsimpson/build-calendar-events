@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <body>
+    <div class="l-listing__group">
+      <!-- Numbered PPV event (URL slug ufc-333). Future timestamp. -->
+      <article class="c-card-event--result">
+        <div class="c-card-event--result__info">
+          <h3 class="c-card-event--result__headline">
+            <a href="/event/ufc-333">VOLKANOVSKI VS EVLOEV</a>
+          </h3>
+          <div class="c-card-event--result__date tz-change-data" data-main-card-timestamp="4081312800">
+            <a href="/event/ufc-333">Future / Main Card</a>
+          </div>
+        </div>
+        <div class="e-p--small c-card-event--result__location">
+          <div class="field--name-taxonomy-term-title"><h5>Etihad Arena</h5></div>
+          <div class="field--name-location">Abu Dhabi United Arab Emirates</div>
+        </div>
+      </article>
+
+      <!-- Fight Night (non-numbered slug). Future timestamp. -->
+      <article class="c-card-event--result">
+        <div class="c-card-event--result__info">
+          <h3 class="c-card-event--result__headline">
+            <a href="/event/ufc-fight-night-october-31-2099">TBD VS TBD</a>
+          </h3>
+          <div class="c-card-event--result__date tz-change-data" data-main-card-timestamp="4081917600">
+            <a href="/event/ufc-fight-night-october-31-2099">Future / Main Card</a>
+          </div>
+        </div>
+        <div class="e-p--small c-card-event--result__location">
+          <div class="field--name-taxonomy-term-title"><h5>Meta APEX</h5></div>
+          <div class="field--name-location">Las Vegas United States</div>
+        </div>
+      </article>
+
+      <!-- Malformed card: non-numeric timestamp should be skipped, not crash. -->
+      <article class="c-card-event--result">
+        <div class="c-card-event--result__info">
+          <h3 class="c-card-event--result__headline">
+            <a href="/event/ufc-broken">BROKEN CARD</a>
+          </h3>
+          <div class="c-card-event--result__date tz-change-data" data-main-card-timestamp="notanumber">
+            <a href="/event/ufc-broken">Broken</a>
+          </div>
+        </div>
+        <div class="e-p--small c-card-event--result__location">
+          <div class="field--name-taxonomy-term-title"><h5>Nowhere Arena</h5></div>
+          <div class="field--name-location">Void Nullland</div>
+        </div>
+      </article>
+    </div>
+  </body>
+</html>

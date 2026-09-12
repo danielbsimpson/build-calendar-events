@@ -47,6 +47,13 @@ def build_parser() -> argparse.ArgumentParser:
         help="Ignore the dedup store and reprocess all fetched events.",
     )
     parser.add_argument(
+        "--look-ahead-days",
+        type=int,
+        default=None,
+        metavar="N",
+        help="Override the look-ahead window (days) from the config for this run.",
+    )
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
@@ -70,11 +77,13 @@ def main(argv: list[str] | None = None) -> int:
         dry_run=args.dry_run,
         no_email=args.no_email,
         force=args.force,
+        look_ahead_days=args.look_ahead_days,
     )
 
     print(
         f"Fetched {result.fetched} event(s); "
         f"{result.new} new; "
+        f"{result.updated} updated; "
         f"{result.sent} emailed."
     )
     if result.errors:

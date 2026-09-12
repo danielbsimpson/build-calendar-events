@@ -31,6 +31,12 @@ class Event:
     #: Free-form extra data a source may want to keep around.
     extra: dict = field(default_factory=dict)
 
+    #: Reminder offsets in minutes before start; each becomes a VALARM.
+    alarms: tuple[int, ...] = ()
+
+    #: Extra description lines appended after the main description.
+    details: tuple[str, ...] = ()
+
     @property
     def uid(self) -> str:
         """Stable unique ID used for dedup and as the .ics UID.
@@ -46,3 +52,18 @@ class Event:
     def resolved_end(self) -> datetime:
         """End time, defaulting to two hours after the start when unknown."""
         return self.end or (self.start + timedelta(hours=2))
+
+    @property
+    def content_hash(self) -> str:
+        """Hash of user-visible fields; changes when the event is rescheduled."""
+        basis = "|".join(
+            [
+                self.title,
+                self.start.isoformat(),
+                self.resolved_end.isoformat(),
+                self.location or "",
+                self.description or "",
+                self.url or "",
+            ]
+        )
+        return hashlib.sha1(basis.encode()).hexdigest()

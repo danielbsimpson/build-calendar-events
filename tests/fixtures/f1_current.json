@@ -1,0 +1,61 @@
+{
+  "MRData": {
+    "series": "f1",
+    "RaceTable": {
+      "season": "2099",
+      "Races": [
+        {
+          "season": "2099",
+          "round": "1",
+          "url": "https://en.wikipedia.org/wiki/Future_Grand_Prix_A",
+          "raceName": "Future Grand Prix A",
+          "Circuit": {
+            "circuitId": "future_a",
+            "circuitName": "Future Circuit A",
+            "Location": {
+              "locality": "Testville",
+              "country": "Testland"
+            }
+          },
+          "date": "2099-06-01",
+          "time": "13:00:00Z",
+          "FirstPractice": { "date": "2099-05-30", "time": "11:30:00Z" },
+          "SecondPractice": { "date": "2099-05-30", "time": "15:00:00Z" },
+          "ThirdPractice": { "date": "2099-05-31", "time": "10:30:00Z" },
+          "Qualifying": { "date": "2099-05-31", "time": "14:00:00Z" }
+        },
+        {
+          "season": "2099",
+          "round": "2",
+          "url": "https://en.wikipedia.org/wiki/Future_Grand_Prix_B",
+          "raceName": "Future Grand Prix B",
+          "Circuit": {
+            "circuitId": "future_b",
+            "circuitName": "Future Circuit B",
+            "Location": {
+              "locality": "Sampleburg",
+              "country": "Sampleland"
+            }
+          },
+          "date": "2099-06-15"
+        },
+        {
+          "season": "2099",
+          "round": "3",
+          "url": "https://en.wikipedia.org/wiki/Past_Grand_Prix",
+          "raceName": "Past Grand Prix",
+          "Circuit": {
+            "circuitId": "past",
+            "circuitName": "Past Circuit",
+            "Location": {
+              "locality": "Oldtown",
+              "country": "Historyland"
+            }
+          },
+          "date": "2000-05-01",
+          "time": "12:00:00Z"
+        }
+      ]
+    }
+  }
+}

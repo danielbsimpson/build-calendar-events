@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timedelta, timezone
 
 from .config import Config
@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 class RunResult:
     fetched: int = 0
     new: int = 0
+    updated: int = 0
     sent: int = 0
     errors: list[str] = None  # type: ignore[assignment]
 
@@ -35,6 +36,7 @@ def run(
     dry_run: bool = False,
     no_email: bool = False,
     force: bool = False,
+    look_ahead_days: int | None = None,
 ) -> RunResult:
     """Execute the pipeline once.
 
@@ -44,18 +46,20 @@ def run(
         dry_run: Do not send email or update the store; just report.
         no_email: Build .ics files but do not send email.
         force: Ignore the dedup store and process all fetched events.
+        look_ahead_days: Override config.look_ahead_days for this run.
     """
     result = RunResult()
     names = source_names or config.sources
+    days = look_ahead_days if look_ahead_days is not None else config.look_ahead_days
     store = SentStore(config.store_file)
     sender = EmailSender(config.email)
-    cutoff = datetime.now(timezone.utc) + timedelta(days=config.look_ahead_days)
+    cutoff = datetime.now(timezone.utc) + timedelta(days=days)
 
     all_events: list[Event] = []
     for name in names:
         try:
             source = get_source(name, config.options_for(name))
-            events = source.fetch(config.look_ahead_days)
+            events = source.fetch(days)
             logger.info("Source '%s' returned %d event(s)", name, len(events))
             all_events.extend(events)
         except Exception as exc:  # keep going if one source fails
@@ -66,29 +70,43 @@ def run(
     result.fetched = len(all_events)
 
     for event in all_events:
-        if event.start > cutoff:
-            continue
-        if not force and store.has(event):
-            continue
-        result.new += 1
+        try:
+            if event.start > cutoff:
+                continue
+            status = store.status(event)
+            if not force and status == "unchanged":
+                continue
+            if status == "updated":
+                result.updated += 1
+            else:
+                result.new += 1
 
-        ics_path = write_ics(event, config.data_dir)
-        logger.info("Prepared invite: %s -> %s", event.title, ics_path.name)
+            # Apply default reminders unless the source provided its own.
+            event_out = (
+                event if event.alarms else replace(event, alarms=config.default_alarms)
+            )
+            sequence = store.sequence_for(event)
+            ics_path = write_ics(
+                event_out,
+                config.data_dir,
+                sequence=sequence,
+                method=config.email.invite_method,
+            )
+            logger.info("Prepared invite: %s -> %s", event.title, ics_path.name)
 
-        if dry_run:
-            continue
-
-        if not no_email:
-            try:
-                sender.send(event, ics_path)
-                result.sent += 1
-            except Exception as exc:
-                msg = f"failed to email '{event.title}': {exc}"
-                logger.exception(msg)
-                result.errors.append(msg)
+            if dry_run:
                 continue
 
-        store.add(event)
+            if not no_email:
+                sender.send(event_out, ics_path)
+                result.sent += 1
+
+            store.add(event_out)
+        except Exception as exc:  # isolate per-event failures
+            msg = f"failed to process '{event.title}': {exc}"
+            logger.exception(msg)
+            result.errors.append(msg)
+            continue
 
     if not dry_run:
         store.save()
