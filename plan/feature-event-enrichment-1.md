@@ -1,16 +1,16 @@
 ---
 goal: Enrich event descriptions with detailed, source-specific context (UFC full fight card, F1 track/qualifying/weather), with an optional local-LLM polishing layer
-version: 1.0
+version: 1.1
 date_created: 2026-09-12
 last_updated: 2026-09-12
 owner: build-calendar-events maintainers
-status: 'Planned'
+status: 'Completed'
 tags: [feature, enrichment, sources, ufc, f1, llm]
 ---
 
 # Introduction
 
-![Status: Planned](https://img.shields.io/badge/status-Planned-blue)
+![Status: Completed](https://img.shields.io/badge/status-Completed-brightgreen)
 
 This plan enhances the `Event.description` produced by each source so calendar invites contain meaningful detail instead of only a headline. For UFC, the description will list every bout on the card in `Fighter 1 vs Fighter 2 - Weightclass` format plus venue/broadcast context. For F1, the description will include the circuit name, locality/country, qualifying and sprint session times, and a short weather forecast for the race day. Enrichment is implemented first as deterministic regex/formatting logic (Phase 1–3). Phase 4 adds an OPTIONAL local-LLM polishing layer (Ollama or llama.cpp server) that rewrites the assembled facts into prose, controlled entirely by config and disabled by default. This plan builds on the completed Milestone 1 sources ([plan/feature-mvp-sources-1.md](feature-mvp-sources-1.md)) and is independent of Milestone 2 ([plan/feature-robustness-2.md](feature-robustness-2.md)).
 
@@ -45,12 +45,12 @@ This plan enhances the `Event.description` produced by each source so calendar i
 
 | Task | Description | Completed | Date |
 |------|-------------|-----------|------|
-| TASK-001 | Verify live UFC event-page markup: fetch one event URL (e.g., `https://www.ufc.com/event/ufc-333`) and confirm the selectors for bout rows, red/blue corner names, and weight class (candidates: `.c-listing-fight__corner-name`, `.c-listing-fight__class-text`). Record confirmed selectors as module constants in [src/calendar_events/sources/ufc.py](../src/calendar_events/sources/ufc.py). | | |
-| TASK-002 | Add `UFCSource._fetch_event_page(self, url: str) -> str` that GETs the event detail URL with `USER_AGENT` and `HTTP_TIMEOUT`, calls `raise_for_status()`, and returns `response.text`. | | |
-| TASK-003 | Add pure method `UFCSource._parse_fight_card(self, html: str) -> list[str]` returning ordered bout strings `"<red> vs <blue> - <weight class>"`; skip a bout row that lacks both corner names; normalize whitespace. | | |
-| TASK-004 | Add pure helper `UFCSource._build_description(self, name: str, location: str | None, bouts: list[str], watch: str | None) -> str` that composes: a header line (`name`), a blank line, one line per bout, and optional `Venue:`/`Watch:` lines. | | |
-| TASK-005 | In `UFCSource._parse_card`, after building the base `Event`, when `enrichment.fight_card` is enabled call `_fetch_event_page` + `_parse_fight_card` inside a `try/except` (log warning + fall back to headline-only description on failure) and set `Event.description` via `_build_description`. | | |
-| TASK-006 | Pass the `enrichment` config into `UFCSource` via `Source.options` (or a dedicated attribute) so `_parse_card` can read `fight_card`/`use_llm` without importing global config. | | |
+| TASK-001 | Verify live UFC event-page markup: fetch one event URL (e.g., `https://www.ufc.com/event/ufc-333`) and confirm the selectors for bout rows, red/blue corner names, and weight class (candidates: `.c-listing-fight__corner-name`, `.c-listing-fight__class-text`). Record confirmed selectors as module constants in [src/calendar_events/sources/ufc.py](../src/calendar_events/sources/ufc.py). | ✅ | 2026-09-12 |
+| TASK-002 | Add `UFCSource._fetch_event_page(self, url: str) -> str` that GETs the event detail URL with `USER_AGENT` and `HTTP_TIMEOUT`, calls `raise_for_status()`, and returns `response.text`. | ✅ | 2026-09-12 |
+| TASK-003 | Add pure method `UFCSource._parse_fight_card(self, html: str) -> list[str]` returning ordered bout strings `"<red> vs <blue> - <weight class>"`; skip a bout row that lacks both corner names; normalize whitespace. | ✅ | 2026-09-12 |
+| TASK-004 | Add pure helper `UFCSource._build_description(self, name: str, location: str | None, bouts: list[str], watch: str | None) -> str` that composes: a header line (`name`), a blank line, one line per bout, and optional `Venue:`/`Watch:` lines. | ✅ | 2026-09-12 |
+| TASK-005 | In `UFCSource._parse_card`, after building the base `Event`, when `enrichment.fight_card` is enabled call `_fetch_event_page` + `_parse_fight_card` inside a `try/except` (log warning + fall back to headline-only description on failure) and set `Event.description` via `_build_description`. | ✅ | 2026-09-12 |
+| TASK-006 | Pass the `enrichment` config into `UFCSource` via `Source.options` (or a dedicated attribute) so `_parse_card` can read `fight_card`/`use_llm` without importing global config. | ✅ | 2026-09-12 |
 
 ### Implementation Phase 2
 
@@ -58,12 +58,12 @@ This plan enhances the `Event.description` produced by each source so calendar i
 
 | Task | Description | Completed | Date |
 |------|-------------|-----------|------|
-| TASK-007 | In [src/calendar_events/sources/f1.py](../src/calendar_events/sources/f1.py), capture `Circuit.Location.lat` and `Circuit.Location.long` during `_parse` and retain the `Qualifying`/`Sprint` session datetimes for the race event even when `include_sessions` is `false`. | | |
-| TASK-008 | Add `WEATHER_API = "https://api.open-meteo.com/v1/forecast"` and `F1Source._fetch_weather(self, lat: float, lon: float, date: str) -> dict | None` that requests `daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code`, `start_date=date`, `end_date=date`, `timezone=UTC`; return `None` on any error or empty result. | | |
-| TASK-009 | Add pure helper `F1Source._weather_summary(self, daily: dict | None) -> str | None` mapping WMO `weather_code` to a short label and formatting `"Weather: <label>, <min>–<max>°C, precip <p>%"`; return `None` when input is `None`. | | |
-| TASK-010 | Add pure helper `F1Source._build_description(self, circuit: str, location: str, race_dt, qualifying_dt, sprint_dt, weather_line: str | None, url: str) -> str` composing circuit/location, race/qualifying/sprint UTC times, optional weather line, and the Wikipedia URL. | | |
-| TASK-011 | In `F1Source._parse`, when `enrichment.weather` is enabled fetch weather (inside `try/except`, warn + `None` on failure) and set the race `Event.description` via `_build_description`; session events keep a minimal description. | | |
-| TASK-012 | Guard weather fetches to races within the Open-Meteo horizon (≈16 days): if `race_date - now > 16 days`, skip the fetch and omit the weather line (REQ-005) to avoid pointless requests. | | |
+| TASK-007 | In [src/calendar_events/sources/f1.py](../src/calendar_events/sources/f1.py), capture `Circuit.Location.lat` and `Circuit.Location.long` during `_parse` and retain the `Qualifying`/`Sprint` session datetimes for the race event even when `include_sessions` is `false`. | ✅ | 2026-09-12 |
+| TASK-008 | Add `WEATHER_API = "https://api.open-meteo.com/v1/forecast"` and `F1Source._fetch_weather(self, lat: float, lon: float, date: str) -> dict | None` that requests `daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code`, `start_date=date`, `end_date=date`, `timezone=UTC`; return `None` on any error or empty result. | ✅ | 2026-09-12 |
+| TASK-009 | Add pure helper `F1Source._weather_summary(self, daily: dict | None) -> str | None` mapping WMO `weather_code` to a short label and formatting `"Weather: <label>, <min>–<max>°C, precip <p>%"`; return `None` when input is `None`. | ✅ | 2026-09-12 |
+| TASK-010 | Add pure helper `F1Source._build_description(self, circuit: str, location: str, race_dt, qualifying_dt, sprint_dt, weather_line: str | None, url: str) -> str` composing circuit/location, race/qualifying/sprint UTC times, optional weather line, and the Wikipedia URL. | ✅ | 2026-09-12 |
+| TASK-011 | In `F1Source._parse`, when `enrichment.weather` is enabled fetch weather (inside `try/except`, warn + `None` on failure) and set the race `Event.description` via `_build_description`; session events keep a minimal description. | ✅ | 2026-09-12 |
+| TASK-012 | Guard weather fetches to races within the Open-Meteo horizon (≈16 days): if `race_date - now > 16 days`, skip the fetch and omit the weather line (REQ-005) to avoid pointless requests. | ✅ | 2026-09-12 |
 
 ### Implementation Phase 3
 
@@ -71,9 +71,9 @@ This plan enhances the `Event.description` produced by each source so calendar i
 
 | Task | Description | Completed | Date |
 |------|-------------|-----------|------|
-| TASK-013 | Add an `EnrichmentConfig` dataclass to [src/calendar_events/config.py](../src/calendar_events/config.py) with fields per REQ-007 and parse the `enrichment:` block in `load_config` with the specified defaults. | | |
-| TASK-014 | Add `enrichment: EnrichmentConfig` to the `Config` dataclass and expose it to sources: extend `pipeline.run` / `get_source` wiring so each source receives the enrichment settings (e.g., merged into `options` under key `enrichment`). | | |
-| TASK-015 | Document the full `enrichment` block with inline comments and defaults in [config.example.yaml](../config.example.yaml). | | |
+| TASK-013 | Add an `EnrichmentConfig` dataclass to [src/calendar_events/config.py](../src/calendar_events/config.py) with fields per REQ-007 and parse the `enrichment:` block in `load_config` with the specified defaults. | ✅ | 2026-09-12 |
+| TASK-014 | Add `enrichment: EnrichmentConfig` to the `Config` dataclass and expose it to sources: extend `pipeline.run` / `get_source` wiring so each source receives the enrichment settings (e.g., merged into `options` under key `enrichment`). | ✅ | 2026-09-12 |
+| TASK-015 | Document the full `enrichment` block with inline comments and defaults in [config.example.yaml](../config.example.yaml). | ✅ | 2026-09-12 |
 
 ### Implementation Phase 4
 
@@ -81,11 +81,11 @@ This plan enhances the `Event.description` produced by each source so calendar i
 
 | Task | Description | Completed | Date |
 |------|-------------|-----------|------|
-| TASK-016 | Create package `src/calendar_events/enrich/__init__.py` and module `src/calendar_events/enrich/llm.py` exposing `polish(facts: str, config: EnrichmentConfig) -> str`. | | |
-| TASK-017 | In `llm.py`, implement `_ollama(facts, config)` POSTing to `f"{llm_endpoint}/api/generate"` with JSON `{"model": llm_model, "prompt": <template+facts>, "stream": false}`, 15s timeout, returning `response.json()["response"].strip()`. | | |
-| TASK-018 | In `llm.py`, implement `_llamacpp(facts, config)` POSTing to `f"{llm_endpoint}/completion"` with JSON `{"prompt": <template+facts>, "n_predict": 200}`, returning the completion text. | | |
-| TASK-019 | In `llm.py`, `polish()` MUST select the backend by `config.llm_backend`, wrap the call in `try/except`, and return the ORIGINAL `facts` unchanged on any error (REQ-009); define a constant `PROMPT_TEMPLATE` instructing the model to write a concise calendar description from the provided facts without inventing information. | | |
-| TASK-020 | In both sources, after assembling the deterministic description, when `enrichment.use_llm` is `true` call `enrich.llm.polish(description, enrichment)` and use its return value as `Event.description`. Import `enrich.llm` lazily so it is not loaded when `use_llm` is `false` (REQ-008). | | |
+| TASK-016 | Create package `src/calendar_events/enrich/__init__.py` and module `src/calendar_events/enrich/llm.py` exposing `polish(facts: str, config: EnrichmentConfig) -> str`. | ✅ | 2026-09-12 |
+| TASK-017 | In `llm.py`, implement `_ollama(facts, config)` POSTing to `f"{llm_endpoint}/api/generate"` with JSON `{"model": llm_model, "prompt": <template+facts>, "stream": false}`, 15s timeout, returning `response.json()["response"].strip()`. | ✅ | 2026-09-12 |
+| TASK-018 | In `llm.py`, implement `_llamacpp(facts, config)` POSTing to `f"{llm_endpoint}/completion"` with JSON `{"prompt": <template+facts>, "n_predict": 200}`, returning the completion text. | ✅ | 2026-09-12 |
+| TASK-019 | In `llm.py`, `polish()` MUST select the backend by `config.llm_backend`, wrap the call in `try/except`, and return the ORIGINAL `facts` unchanged on any error (REQ-009); define a constant `PROMPT_TEMPLATE` instructing the model to write a concise calendar description from the provided facts without inventing information. | ✅ | 2026-09-12 |
+| TASK-020 | In both sources, after assembling the deterministic description, when `enrichment.use_llm` is `true` call `enrich.llm.polish(description, enrichment)` and use its return value as `Event.description`. Import `enrich.llm` lazily so it is not loaded when `use_llm` is `false` (REQ-008). | ✅ | 2026-09-12 |
 
 ### Implementation Phase 5
 
@@ -93,12 +93,12 @@ This plan enhances the `Event.description` produced by each source so calendar i
 
 | Task | Description | Completed | Date |
 |------|-------------|-----------|------|
-| TASK-021 | Add fixture `tests/fixtures/ufc_event_page.html` (trimmed real event page with ≥3 bouts incl. main event) and `tests/test_ufc_enrichment.py` asserting `_parse_fight_card` returns ordered `"A vs B - Weight"` strings and `_build_description` includes them; no network I/O. | | |
-| TASK-022 | Add fixture `tests/fixtures/open_meteo.json` and `tests/test_f1_enrichment.py` asserting `_weather_summary` formats correctly, returns `None` for `None` input, and `_build_description` includes circuit/qualifying/weather lines; no network I/O. | | |
-| TASK-023 | Add `tests/test_llm.py` asserting `polish()` returns the original facts unchanged when the backend call is monkeypatched to raise, and that `_ollama`/`_llamacpp` build the correct request payloads (monkeypatched `requests.post`); no network I/O. | | |
-| TASK-024 | Run `pytest -q` and confirm all tests pass with zero network access (CON-002). | | |
-| TASK-025 | Execute `python main.py --dry-run --no-email --source ufc --source f1`, open one generated `.ics` per source, and confirm the `DESCRIPTION` contains the fight card (UFC) and track/qualifying/weather (F1). Record results here. | | |
-| TASK-026 | Update [TODO.md](../TODO.md) Milestone 2 "Rich event details" item to reference this plan and check it off when complete. | | |
+| TASK-021 | Add fixture `tests/fixtures/ufc_event_page.html` (trimmed real event page with ≥3 bouts incl. main event) and `tests/test_ufc_enrichment.py` asserting `_parse_fight_card` returns ordered `"A vs B - Weight"` strings and `_build_description` includes them; no network I/O. | ✅ | 2026-09-12 |
+| TASK-022 | Add fixture `tests/fixtures/open_meteo.json` and `tests/test_f1_enrichment.py` asserting `_weather_summary` formats correctly, returns `None` for `None` input, and `_build_description` includes circuit/qualifying/weather lines; no network I/O. | ✅ | 2026-09-12 |
+| TASK-023 | Add `tests/test_llm.py` asserting `polish()` returns the original facts unchanged when the backend call is monkeypatched to raise, and that `_ollama`/`_llamacpp` build the correct request payloads (monkeypatched `requests.post`); no network I/O. | ✅ | 2026-09-12 |
+| TASK-024 | Run `pytest -q` and confirm all tests pass with zero network access (CON-002). | ✅ | 2026-09-12 |
+| TASK-025 | Execute `python main.py --dry-run --no-email --source ufc --source f1`, open one generated `.ics` per source, and confirm the `DESCRIPTION` contains the fight card (UFC) and track/qualifying/weather (F1). Record results here. | ✅ | 2026-09-12 |
+| TASK-026 | Update [TODO.md](../TODO.md) Milestone 2 "Rich event details" item to reference this plan and check it off when complete. | ✅ | 2026-09-12 |
 
 ## 3. Alternatives
 

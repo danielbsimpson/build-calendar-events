@@ -28,6 +28,16 @@ class EmailConfig:
 
 
 @dataclass
+class EnrichmentConfig:
+    fight_card: bool = True
+    weather: bool = True
+    use_llm: bool = False
+    llm_backend: str = "ollama"
+    llm_model: str = "llama3"
+    llm_endpoint: str = "http://localhost:11434"
+
+
+@dataclass
 class Config:
     look_ahead_days: int = 120
     sources: list[str] = field(default_factory=list)
@@ -36,6 +46,8 @@ class Config:
     email: EmailConfig = field(default_factory=EmailConfig)
     source_options: dict = field(default_factory=dict)
     default_alarms: tuple[int, ...] = (60,)
+    event_color: str | None = None
+    enrichment: EnrichmentConfig = field(default_factory=EnrichmentConfig)
 
     def options_for(self, source_name: str) -> dict:
         """Return the per-source options block, or an empty dict."""
@@ -73,6 +85,16 @@ def load_config(path: str | Path = "config.yaml") -> Config:
         smtp=smtp,
     )
 
+    enrich_raw = raw.get("enrichment", {}) or {}
+    enrichment = EnrichmentConfig(
+        fight_card=_as_bool(enrich_raw.get("fight_card", True)),
+        weather=_as_bool(enrich_raw.get("weather", True)),
+        use_llm=_as_bool(enrich_raw.get("use_llm", False)),
+        llm_backend=str(enrich_raw.get("llm_backend", "ollama")),
+        llm_model=str(enrich_raw.get("llm_model", "llama3")),
+        llm_endpoint=str(enrich_raw.get("llm_endpoint", "http://localhost:11434")),
+    )
+
     return Config(
         look_ahead_days=int(raw.get("look_ahead_days", 120)),
         sources=list(raw.get("sources", [])),
@@ -81,6 +103,8 @@ def load_config(path: str | Path = "config.yaml") -> Config:
         email=email,
         source_options=raw.get("source_options", {}) or {},
         default_alarms=tuple(raw.get("default_alarms", [60]) or ()),
+        event_color=raw.get("event_color") or None,
+        enrichment=enrichment,
     )
 
 

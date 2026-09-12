@@ -19,9 +19,9 @@ def test_parse_returns_future_races_only():
     # Two future races kept; the year-2000 race is dropped as past.
     assert len(events) == 2
     titles = {e.title for e in events}
-    assert titles == {"F1: Future Grand Prix A", "F1: Future Grand Prix B"}
+    assert titles == {"🏎️ F1: Future Grand Prix A", "🏎️ F1: Future Grand Prix B"}
 
-    race_a = next(e for e in events if e.title == "F1: Future Grand Prix A")
+    race_a = next(e for e in events if e.title == "🏎️ F1: Future Grand Prix A")
     assert race_a.start == datetime(2099, 6, 1, 13, 0, tzinfo=timezone.utc)
     assert race_a.start.tzinfo == timezone.utc
     assert race_a.location == "Future Circuit A, Testville, Testland"
@@ -31,7 +31,7 @@ def test_parse_returns_future_races_only():
 
 def test_missing_time_defaults_to_1400z():
     events = F1Source()._parse(_load(), FAR_AHEAD)
-    race_b = next(e for e in events if e.title == "F1: Future Grand Prix B")
+    race_b = next(e for e in events if e.title == "🏎️ F1: Future Grand Prix B")
     assert race_b.start == datetime(2099, 6, 15, 14, 0, tzinfo=timezone.utc)
 
 
@@ -41,7 +41,7 @@ def test_include_sessions_adds_session_events():
     # Race A defines FP1, FP2, FP3, Qualifying (4); Race B defines none.
     assert len(sessions) == 4
     labels = {e.title.split(":")[0] for e in sessions}
-    assert labels == {"F1 FP1", "F1 FP2", "F1 FP3", "F1 Qualifying"}
+    assert labels == {"🏎️ F1 FP1", "🏎️ F1 FP2", "🏎️ F1 FP3", "🏎️ F1 Qualifying"}
 
 
 def test_window_filter_drops_far_future():

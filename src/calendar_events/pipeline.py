@@ -37,6 +37,7 @@ def run(
     no_email: bool = False,
     force: bool = False,
     look_ahead_days: int | None = None,
+    limit: int | None = None,
 ) -> RunResult:
     """Execute the pipeline once.
 
@@ -47,6 +48,7 @@ def run(
         no_email: Build .ics files but do not send email.
         force: Ignore the dedup store and process all fetched events.
         look_ahead_days: Override config.look_ahead_days for this run.
+        limit: Process at most this many events (None means no cap).
     """
     result = RunResult()
     names = source_names or config.sources
@@ -58,7 +60,8 @@ def run(
     all_events: list[Event] = []
     for name in names:
         try:
-            source = get_source(name, config.options_for(name))
+            options = {**config.options_for(name), "enrichment": config.enrichment}
+            source = get_source(name, options)
             events = source.fetch(days)
             logger.info("Source '%s' returned %d event(s)", name, len(events))
             all_events.extend(events)
@@ -69,7 +72,10 @@ def run(
 
     result.fetched = len(all_events)
 
+    processed = 0
     for event in all_events:
+        if limit is not None and processed >= limit:
+            break
         try:
             if event.start > cutoff:
                 continue
@@ -80,6 +86,7 @@ def run(
                 result.updated += 1
             else:
                 result.new += 1
+            processed += 1
 
             # Apply default reminders unless the source provided its own.
             event_out = (
@@ -91,6 +98,7 @@ def run(
                 config.data_dir,
                 sequence=sequence,
                 method=config.email.invite_method,
+                color=config.event_color,
             )
             logger.info("Prepared invite: %s -> %s", event.title, ics_path.name)
 

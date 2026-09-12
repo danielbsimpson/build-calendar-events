@@ -1,0 +1,12 @@
+{
+  "latitude": 1.29,
+  "longitude": 103.86,
+  "timezone": "UTC",
+  "daily": {
+    "time": ["2026-09-20"],
+    "temperature_2m_max": [24.6],
+    "temperature_2m_min": [15.1],
+    "precipitation_probability_max": [30],
+    "weather_code": [2]
+  }
+}

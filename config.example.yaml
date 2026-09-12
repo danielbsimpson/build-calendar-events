@@ -7,7 +7,13 @@ look_ahead_days: 120
 # Default reminders (minutes before start) added to every event as VALARMs.
 # Set to an empty list ([]) to disable reminders.
 default_alarms:
-  - 60
+  - 1440  # 1 day before
+  - 30    # 30 minutes before
+
+# Optional iCalendar COLOR (RFC 7986), e.g. a CSS3 color name like "tomato".
+# Honored by Google Calendar and some clients; Apple Calendar colors events by
+# their containing calendar, so a subscribed feed is more reliable there.
+event_color: tomato
 
 # Which sources to run. Names must match registered sources
 # (see src/calendar_events/sources/base.py).
@@ -41,3 +47,13 @@ source_options:
   ufc:
     # Only include numbered PPV events, or set false to include Fight Nights too.
     ppv_only: false
+
+# Richer event descriptions (fight cards, F1 track/session/weather).
+enrichment:
+  fight_card: true      # UFC: list every bout on the card
+  weather: true         # F1: add a race-day weather line (Open-Meteo, keyless)
+  # Optional: rewrite the assembled facts with a local LLM. Off by default.
+  use_llm: false
+  llm_backend: ollama   # "ollama" or "llamacpp"
+  llm_model: llama3
+  llm_endpoint: http://localhost:11434

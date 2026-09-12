@@ -19,7 +19,7 @@ def test_parse_extracts_events():
     assert len(events) == 2
 
     ppv = next(e for e in events if "VOLKANOVSKI" in e.title)
-    assert ppv.title == "UFC: VOLKANOVSKI VS EVLOEV"
+    assert ppv.title == "🥊 UFC: VOLKANOVSKI VS EVLOEV"
     assert ppv.start.tzinfo == timezone.utc
     assert ppv.url == "https://www.ufc.com/event/ufc-333"
     assert ppv.location == "Etihad Arena, Abu Dhabi United Arab Emirates"

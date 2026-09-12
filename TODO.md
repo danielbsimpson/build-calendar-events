@@ -44,8 +44,8 @@ scaffolding for everything in Milestone 0 already exists as stubs.
 - [x] Graceful handling when a single source fails (don't abort the whole run)
 - [x] Respect `robots.txt` and add polite rate limiting / user-agent
 - [x] Configurable look-ahead window (e.g. only events in the next N months)
-- [ ] Rich event details: location, broadcaster, card/session breakdown, reminders/alarms
-      — reminders/alarms done; content enrichment: [plan/feature-event-enrichment-1.md](plan/feature-event-enrichment-1.md)
+- [x] Rich event details: location, broadcaster, card/session breakdown, reminders/alarms
+      — reminders/alarms, UFC fight cards, F1 track/session/weather (+ optional local LLM): [plan/feature-event-enrichment-1.md](plan/feature-event-enrichment-1.md)
 - [x] De-dup by stable content hash so rescheduled events send an update, not a duplicate
 - [x] Optional: emit `METHOD:REQUEST` invites vs plain `PUBLISH` events
 

@@ -54,6 +54,13 @@ def build_parser() -> argparse.ArgumentParser:
         help="Override the look-ahead window (days) from the config for this run.",
     )
     parser.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        metavar="N",
+        help="Process at most N events this run (handy for a first test send).",
+    )
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
@@ -78,6 +85,7 @@ def main(argv: list[str] | None = None) -> int:
         no_email=args.no_email,
         force=args.force,
         look_ahead_days=args.look_ahead_days,
+        limit=args.limit,
     )
 
     print(
