@@ -1,0 +1,2 @@
+# Keeps the data/ directory in version control while its contents are ignored.
+# Generated .ics files and the dedup store live here at runtime.

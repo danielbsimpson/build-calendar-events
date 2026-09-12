@@ -1,0 +1,35 @@
+# Copy this file to `config.yaml` and edit it.
+# Secrets (SMTP username/password) belong in `.env`, not here.
+
+# How far ahead to look for events (in days). Events beyond this are ignored.
+look_ahead_days: 120
+
+# Which sources to run. Names must match registered sources
+# (see src/calendar_events/sources/base.py).
+sources:
+  - ufc
+  - f1
+
+# Where generated .ics files and the dedup store live.
+data_dir: data
+store_file: data/sent_events.json
+
+# Email delivery settings. Username/password come from environment variables
+# (SMTP_USERNAME / SMTP_PASSWORD) so they are never committed.
+email:
+  to: you@example.com
+  from: you@example.com
+  subject_prefix: "[Sports Calendar] "
+  smtp:
+    host: smtp.gmail.com
+    port: 587
+    use_tls: true
+
+# Per-source options (optional). Each source may read its own block.
+source_options:
+  f1:
+    # Include support sessions (practice/qualifying/sprint) as separate events.
+    include_sessions: false
+  ufc:
+    # Only include numbered PPV events, or set false to include Fight Nights too.
+    ppv_only: false

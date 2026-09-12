@@ -1,0 +1,15 @@
+# HTTP + scraping
+requests>=2.31
+beautifulsoup4>=4.12
+
+# Config
+PyYAML>=6.0
+
+# Calendar file generation
+ics>=0.7.2
+
+# Timezone data (Windows especially needs this for zoneinfo)
+tzdata>=2024.1
+
+# Dev / testing
+pytest>=8.0
