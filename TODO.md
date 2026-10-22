@@ -66,9 +66,12 @@ scaffolding for everything in Milestone 0 already exists as stubs.
       the calendar can be colored on-device — combined F1 + UFC feed built by
       `python main.py feed` ([src/calendar_events/feed.py](src/calendar_events/feed.py)),
       hosted on GitHub Pages.
-  - [ ] **BUG-001 stays open until verified on an actual iPhone**: subscribe
-        once, pick a color, then confirm an updated event and a removed event
-        propagate without re-subscribing, with the color preserved. Deployment
+  - [ ] **BUG-001 stays open until Stage 4 is verified on an actual iPhone.**
+        Verified on-device 2026-10-22: subscribed to the hosted HTTPS feed,
+        chose a calendar color, and the colored F1 + UFC events added reliably
+        with no Accept / "Add All" step (Stages 1-3). Still pending (Stage 4):
+        confirm an updated event propagates in place and a removed event
+        disappears without re-subscribing, color preserved. Deployment
         succeeding is not proof the bug is fixed.
 - [x] Support unattended scheduled runs (monthly) — GitHub Actions `schedule`
       (accepts the 60-day inactivity shutdown; re-enable from the Actions tab).
@@ -114,7 +117,7 @@ a missing event is omitted but not treated as a cancellation. Email delivery
 
 ## Known issues
 
-- **BUG-001 — Event color vs. reliable add on iOS (open, deferred to Milestone 3).**
+- **BUG-001 — Event color vs. reliable add on iOS (fix in progress, Milestone 3).**
   Apple Calendar colors events by their **containing calendar**, not by the `.ics`
   `COLOR` property, so per-event color does not work on iPhone.
   - `METHOD:REQUEST` invites add reliably via Accept, but iOS always files accepted
@@ -125,9 +128,12 @@ a missing event is omitted but not treated as a cancellation. Email delivery
     "Done" silently discards the event).
   - Workaround while deferred: temporarily set the iPhone **Default Calendar** to
     "Sports" before accepting REQUEST invites so they inherit its color.
-  - Planned fix: deliver via a **subscribed calendar feed** (webcal / ICS URL)
-    whose color is set once on the device, avoiding the per-invite limitation
-    entirely (tracked in Milestone 3).
+  - **Fix: a subscribed calendar feed** whose color is set once on the device
+    (Milestone 3). Verified on-device 2026-10-22 that subscribing to the hosted
+    HTTPS feed and choosing a color adds the colored F1 + UFC events reliably
+    with no Accept / "Add All" step. **Remaining to close:** confirm an updated
+    event updates in place and a removed event disappears without
+    re-subscribing (Stage 4).
 
 - **BUG-002 — `.ics` not RFC 5545-compliant; events wouldn't save on iOS (resolved 2026-09-12).**
   Generated invites previewed on iPhone but couldn't be saved. Four spec
