@@ -60,12 +60,35 @@ scaffolding for everything in Milestone 0 already exists as stubs.
 
 ## Milestone 3 — Automation
 
-- [ ] Publish a subscribable calendar feed (webcal / ICS URL) so events auto-update and the calendar can be colored on-device (resolves BUG-001)
-- [ ] Support unattended scheduled runs (monthly)
-- [ ] Runner: cron example + GitHub Actions workflow (with secrets)
-- [ ] Persist dedup store between runs in CI (artifact/cache or committed data)
-- [ ] Notification/summary email even when there is nothing new (optional)
-- [ ] Failure alerting (email/log) when a source breaks
+> Design: [docs/adr/0001-feed-first-sports-calendar.md](docs/adr/0001-feed-first-sports-calendar.md)
+
+- [x] Publish a subscribable calendar feed (ICS URL) so events auto-update and
+      the calendar can be colored on-device — combined F1 + UFC feed built by
+      `python main.py feed` ([src/calendar_events/feed.py](src/calendar_events/feed.py)),
+      hosted on GitHub Pages.
+  - [ ] **BUG-001 stays open until verified on an actual iPhone**: subscribe
+        once, pick a color, then confirm an updated event and a removed event
+        propagate without re-subscribing, with the color preserved. Deployment
+        succeeding is not proof the bug is fixed.
+- [x] Support unattended scheduled runs (monthly) — GitHub Actions `schedule`
+      (accepts the 60-day inactivity shutdown; re-enable from the Actions tab).
+- [x] Runner: cron example + GitHub Actions workflow
+      ([.github/workflows/publish-feed.yml](.github/workflows/publish-feed.yml),
+      [docs/cron-example.sh](docs/cron-example.sh)). The feed job needs no
+      secrets; Pages deploy uses the workflow token with least privilege.
+- [x] Persist dedup store between runs in CI — durable feed revision state
+      (UIDs/`SEQUENCE`) on a dedicated `feed-state` branch
+      ([src/calendar_events/feed_store.py](src/calendar_events/feed_store.py)).
+- [x] Notification/summary even when there is nothing new — each run writes a
+      per-source summary to the GitHub step summary (no CI SMTP).
+- [x] Failure alerting when a source breaks — the feed build fails closed and
+      the workflow fails, surfacing GitHub's run-failure notification.
+
+Feed semantics (see the ADR): each successful run publishes the complete
+in-window collection; if any source errors or returns no events (without
+`--allow-empty`) the whole run is rejected and the last-good feed stays hosted;
+a missing event is omitted but not treated as a cancellation. Email delivery
+(`python main.py`) is retained as an explicit manual mode.
 
 ---
 

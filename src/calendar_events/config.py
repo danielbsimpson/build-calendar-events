@@ -43,6 +43,9 @@ class Config:
     sources: list[str] = field(default_factory=list)
     data_dir: Path = Path("data")
     store_file: Path = Path("data/sent_events.json")
+    feed_file: Path = Path("public/sports.ics")
+    feed_state_file: Path = Path("data/feed_state.json")
+    calendar_name: str = "Sports"
     email: EmailConfig = field(default_factory=EmailConfig)
     source_options: dict = field(default_factory=dict)
     default_alarms: tuple[int, ...] = (60,)
@@ -100,6 +103,9 @@ def load_config(path: str | Path = "config.yaml") -> Config:
         sources=list(raw.get("sources", [])),
         data_dir=Path(raw.get("data_dir", "data")),
         store_file=Path(raw.get("store_file", "data/sent_events.json")),
+        feed_file=Path(raw.get("feed_file", "public/sports.ics")),
+        feed_state_file=Path(raw.get("feed_state_file", "data/feed_state.json")),
+        calendar_name=str(raw.get("calendar_name", "Sports")),
         email=email,
         source_options=raw.get("source_options", {}) or {},
         default_alarms=tuple(raw.get("default_alarms", [60]) or ()),

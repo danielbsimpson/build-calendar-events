@@ -27,9 +27,9 @@ sources (scrape/API)  ──►  dedup store  ──►  .ics builder  ──►
 4. **Deliver** — The `.ics` files are emailed to you via SMTP as calendar
    attachments.
 
-Today it runs **manually** as a single command. It is structured so it can later
-be run on a schedule (e.g. monthly via cron / GitHub Actions) to automatically
-pick up only newly announced events.
+Today it runs **manually** as a single command. It can also publish a combined,
+subscribable calendar **feed** (see [Subscription feed](#subscription-feed)) that
+you subscribe to once on your devices and colour on-device.
 
 ---
 
@@ -107,6 +107,80 @@ Run `python main.py --help` for the complete list.
 
 ---
 
+## Subscription feed
+
+Instead of emailing one `.ics` per event, you can publish a single **combined
+calendar feed** containing the complete set of upcoming F1 + UFC events and
+subscribe to it once per device. Apple Calendar colours events by their
+**containing calendar**, so a subscribed feed is the reliable way to get a
+coloured "Sports" calendar on iPhone (this is the intended fix for BUG-001 —
+see [TODO.md](TODO.md)).
+
+Build the feed locally:
+
+```bash
+# Write the full upcoming collection to public/sports.ics (see config.yaml)
+python main.py feed
+
+# Validate without writing the feed or state
+python main.py feed --dry-run
+
+# Authorize publishing even if a source returns no in-window events
+python main.py feed --allow-empty
+```
+
+The feed **fails closed**: if any enabled source errors, or returns no in-window
+events without `--allow-empty`, nothing is written and the command exits
+non-zero — so a broken scraper can never silently replace your calendar with a
+partial one. Event UIDs and `SEQUENCE` are tracked in `feed_state_file` so a
+rescheduled event **updates in place** for subscribers instead of duplicating.
+
+### Hosting the feed (GitHub Pages)
+
+[`.github/workflows/publish-feed.yml`](.github/workflows/publish-feed.yml)
+rebuilds and publishes the feed to GitHub Pages monthly (and on demand via
+**Run workflow**). One-time setup:
+
+1. Push to a **public** repository (free GitHub Pages requires public repos).
+2. **Settings → Pages → Build and deployment → Source: "GitHub Actions"**.
+3. Trigger the workflow once (**Actions → Publish sports feed → Run workflow**).
+
+The feed is then served at a stable HTTPS URL:
+
+```
+https://<your-user>.github.io/<repo>/sports.ics
+```
+
+Durable state (UIDs/`SEQUENCE`) and the published `.ics` are committed to a
+dedicated **`feed-state`** branch so updates stay stable across runs; the
+workflow serializes runs and never touches the hosted feed when a build fails.
+
+> **Heads up:** scheduled GitHub Actions are auto-disabled after 60 days of
+> repository inactivity and can be delayed under load — re-enable them from the
+> Actions tab if a monthly run is skipped.
+
+### Subscribing on iPhone
+
+On iOS, **Calendar → Calendars → Add Calendar → Add Subscription Calendar**,
+paste the HTTPS `sports.ics` URL, then pick a colour. The calendar is read-only;
+corrections flow from the feed rather than from editing events on the device.
+(A `webcal://` link can open the subscription sheet directly, but the canonical
+address is the HTTPS URL.) After verifying the subscription, remove or hide any
+old sports events you previously imported — the feed cannot delete copies that
+already live in your other calendars.
+
+Google Calendar and Outlook can also subscribe by URL (not one-time *import*),
+but refresh timing is controlled by each client and is not certified here.
+
+### Running elsewhere (cron)
+
+[`docs/cron-example.sh`](docs/cron-example.sh) shows how to regenerate the feed
+on another always-on machine on a schedule. Note it only *generates* the file;
+hosting it over HTTPS is left to you (GitHub Actions → Pages is the supported
+end-to-end path).
+
+---
+
 ## Project structure
 
 ```
@@ -115,16 +189,21 @@ build-calendar-events/
 ├── config.example.yaml         # documented config template
 ├── .env.example                # secret env-var template
 ├── requirements.txt
-├── data/                       # dedup store + generated .ics files (gitignored)
+├── .github/workflows/          # publish-feed.yml (monthly Pages publish)
+├── docs/                       # cron-example.sh, agent/domain docs
+├── data/                       # dedup store + feed state + .ics output (gitignored)
+├── public/                     # generated feed (public/sports.ics)
 ├── src/
 │   └── calendar_events/
-│       ├── cli.py              # argument parsing & orchestration
+│       ├── cli.py              # argument parsing & orchestration (email + feed)
 │       ├── config.py           # load/merge config.yaml + env vars
 │       ├── models.py           # Event data model
-│       ├── ics.py              # build .ics calendar files
+│       ├── ics.py              # build .ics calendar files (single + feed)
 │       ├── email_sender.py     # SMTP delivery
-│       ├── store.py            # JSON dedup store
-│       ├── pipeline.py         # ties the whole flow together
+│       ├── store.py            # JSON dedup store (email ledger)
+│       ├── feed_store.py       # durable feed revision state (UIDs/SEQUENCE)
+│       ├── feed.py             # build + validate the subscription feed
+│       ├── pipeline.py         # ties the email flow together
 │       └── sources/
 │           ├── base.py         # Source base class + registry
 │           ├── ufc.py          # UFC events source

@@ -25,18 +25,16 @@ def _build_description(event: Event) -> str:
     return "\n\n".join(parts)
 
 
-def build_calendar(
+def _build_ics_event(
     event: Event,
     *,
     sequence: int = 0,
-    method: str = "PUBLISH",
+    method: str | None = "PUBLISH",
     color: str | None = None,
     organizer: str | None = None,
     attendee: str | None = None,
-) -> Calendar:
-    """Build a single-event iCalendar object from an Event."""
-    cal = Calendar()
-    cal.method = method
+) -> IcsEvent:
+    """Build a single VEVENT component from an Event."""
     ics_event = IcsEvent()
     ics_event.uid = event.uid
     ics_event.name = event.title
@@ -52,8 +50,7 @@ def build_calendar(
     # ics 0.7.x has no native SEQUENCE support; inject it as a raw content line.
     ics_event.extra.append(ContentLine(name="SEQUENCE", value=str(sequence)))
     if color:
-        # RFC 7986 COLOR (event + calendar) so supporting clients can tint it.
-        cal.extra.append(ContentLine(name="COLOR", value=color))
+        # RFC 7986 COLOR so supporting clients can tint the event.
         ics_event.extra.append(ContentLine(name="COLOR", value=color))
     ics_event.extra.append(ContentLine(name="CATEGORIES", value="Sports"))
     # DTSTAMP is REQUIRED by RFC 5545 for every VEVENT; ics 0.7.x omits it.
@@ -84,7 +81,68 @@ def build_calendar(
                     value=f"mailto:{attendee}",
                 )
             )
+    return ics_event
+
+
+def build_calendar(
+    event: Event,
+    *,
+    sequence: int = 0,
+    method: str = "PUBLISH",
+    color: str | None = None,
+    organizer: str | None = None,
+    attendee: str | None = None,
+) -> Calendar:
+    """Build a single-event iCalendar object from an Event."""
+    cal = Calendar()
+    cal.method = method
+    if color:
+        # Calendar-level COLOR (RFC 7986) in addition to the per-event COLOR.
+        cal.extra.append(ContentLine(name="COLOR", value=color))
+    ics_event = _build_ics_event(
+        event,
+        sequence=sequence,
+        method=method,
+        color=color,
+        organizer=organizer,
+        attendee=attendee,
+    )
     cal.events.add(ics_event)
+    return cal
+
+
+def build_feed_calendar(
+    events: list[Event],
+    *,
+    sequences: dict[str, int] | None = None,
+    color: str | None = None,
+    calendar_name: str | None = None,
+) -> Calendar:
+    """Build a multi-event iCalendar collection for a subscription feed.
+
+    Unlike :func:`build_calendar`, this emits no iTIP ``METHOD``: a subscribed
+    calendar is a published collection, not an invitation. ``sequences`` maps an
+    event UID to the SEQUENCE to publish (defaulting to 0) so an updated event
+    supersedes the subscriber's existing copy instead of duplicating it.
+    """
+    sequences = sequences or {}
+    cal = Calendar()
+    if calendar_name:
+        # X-WR-CALNAME is the de-facto calendar display name (Apple/Google);
+        # NAME is its RFC 7986 standard counterpart.
+        cal.extra.append(ContentLine(name="X-WR-CALNAME", value=calendar_name))
+        cal.extra.append(ContentLine(name="NAME", value=calendar_name))
+    if color:
+        cal.extra.append(ContentLine(name="COLOR", value=color))
+    for event in events:
+        cal.events.add(
+            _build_ics_event(
+                event,
+                sequence=sequences.get(event.uid, 0),
+                method=None,
+                color=color,
+            )
+        )
     return cal
 
 

@@ -1,0 +1,119 @@
+name: Publish sports feed
+
+# Milestone 3 automation: build the combined F1 + UFC subscription feed and
+# publish it to GitHub Pages roughly monthly, plus on demand.
+#
+# Prerequisites (one-time, see README "Hosting the feed"):
+#   - Settings -> Pages -> Build and deployment -> Source: "GitHub Actions".
+#
+# Notes:
+#   - Scheduled runs only fire from the default branch, can be delayed under
+#     load, and are auto-disabled after 60 days of repository inactivity.
+#   - The build fails closed: if any source errors or returns no in-window
+#     events, nothing is published and this workflow fails (you get GitHub's
+#     failure notification). The previously published feed stays hosted.
+
+on:
+  schedule:
+    # 07:17 UTC on the 1st of each month (off the top of the hour on purpose,
+    # to reduce the chance of a scheduling delay).
+    - cron: "17 7 1 * *"
+  workflow_dispatch:
+    inputs:
+      allow_empty:
+        description: "Authorize publishing even if a source returns no events"
+        type: boolean
+        default: false
+
+# Serialize runs so a scheduled run and a manual run never race on the shared
+# feed-state branch. Do not cancel an in-flight publish.
+concurrency:
+  group: publish-sports-feed
+  cancel-in-progress: false
+
+permissions:
+  contents: write   # push the durable feed-state branch
+  pages: write      # deploy to GitHub Pages
+  id-token: write   # verify the Pages deployment origin
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Use the committed feed config
+        run: cp config.example.yaml config.yaml
+
+      - name: Restore durable feed state
+        # The feed-state branch holds the last-good state (and candidate feed).
+        # A worktree keeps it isolated from the code checkout. Bootstrap it on
+        # the very first run when the branch does not exist yet. If the branch
+        # exists but has no state file, fail: that is corrupt state after setup,
+        # not a first run, and silently resetting every SEQUENCE would make the
+        # whole feed look brand new to subscribers.
+        run: |
+          mkdir -p data
+          if git fetch origin feed-state; then
+            git worktree add --checkout feed-state origin/feed-state
+            git -C feed-state checkout -B feed-state
+            if [ -f feed-state/feed_state.json ]; then
+              cp feed-state/feed_state.json data/feed_state.json
+              echo "Restored prior feed state."
+            else
+              echo "::error::feed-state branch exists but feed_state.json is missing"
+              exit 1
+            fi
+          else
+            git worktree add --detach feed-state
+            git -C feed-state checkout --orphan feed-state
+            git -C feed-state rm -rf . >/dev/null 2>&1 || true
+            echo "No prior feed state; bootstrapping feed-state branch."
+          fi
+
+      - name: Build and validate the feed
+        # Exits non-zero on any source failure or unauthorized empty source,
+        # which fails the workflow and leaves the hosted feed untouched.
+        run: |
+          python main.py feed ${{ (github.event_name == 'workflow_dispatch' && inputs.allow_empty) && '--allow-empty' || '' }}
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Persist feed state and candidate
+        # Runs only after the deploy step above succeeds (steps stop on the
+        # first failure), so the durable state never advances past a feed that
+        # was not actually published.
+        run: |
+          cp data/feed_state.json feed-state/feed_state.json
+          cp public/sports.ics feed-state/sports.ics
+          cd feed-state
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add feed_state.json sports.ics
+          if git diff --cached --quiet; then
+            echo "No feed changes to persist."
+          else
+            git commit -m "Update sports feed state ($(date -u +%Y-%m-%dT%H:%MZ))"
+            git push origin feed-state
+          fi

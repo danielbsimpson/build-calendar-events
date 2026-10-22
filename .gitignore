@@ -15,9 +15,12 @@ env/
 .env
 config.yaml
 
-# Generated data (dedup store + .ics output)
+# Generated data (dedup store + feed state + .ics output)
 data/*
 !data/.gitkeep
+
+# Generated subscription feed (published via Actions/Pages, not committed to main)
+public/
 
 # Test / tooling caches
 .pytest_cache/

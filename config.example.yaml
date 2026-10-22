@@ -25,6 +25,15 @@ sources:
 data_dir: data
 store_file: data/sent_events.json
 
+# --- Subscription feed (Milestone 3) ---------------------------------------
+# The combined, subscribable calendar. `python main.py feed` writes the whole
+# upcoming collection to `feed_file`; subscribe to its hosted HTTPS URL once and
+# colour the calendar on-device. `feed_state_file` keeps event UIDs/SEQUENCE
+# stable across runs so updates replace events instead of duplicating them.
+calendar_name: Sports
+feed_file: public/sports.ics
+feed_state_file: data/feed_state.json
+
 # Email delivery settings. Username/password come from environment variables
 # (SMTP_USERNAME / SMTP_PASSWORD) so they are never committed.
 email:
