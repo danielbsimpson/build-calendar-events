@@ -13,7 +13,7 @@ import logging
 import re
 from dataclasses import replace
 from datetime import datetime, timedelta, timezone
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 from bs4 import BeautifulSoup
 
@@ -150,8 +150,37 @@ class UFCSource(Source):
             start=start,
             location=location,
             url=url,
-            external_id=self._slugify(f"{name}-{start.date().isoformat()}"),
+            external_id=self._external_id(name, url, start),
         )
+
+    @classmethod
+    def _external_id(cls, name: str, url: str, start: datetime) -> str:
+        """Stable identity for the event.
+
+        Prefer the event page's URL slug (e.g. ``ufc-336``): it stays constant
+        as the headliner goes from "TBD vs TBD" to an announced matchup, so the
+        event updates in place for subscribers instead of being replaced. Fall
+        back to the old name+date scheme only when no slug is available.
+        """
+        slug = cls._url_slug(url)
+        if slug:
+            return slug
+        return cls._slugify(f"{name}-{start.date().isoformat()}")
+
+    @staticmethod
+    def _url_slug(url: str | None) -> str:
+        """Return a UFC event's URL slug (the segment after ``/event/``), or ''.
+
+        Real event URLs look like ``https://www.ufc.com/event/ufc-336``; the
+        slug is the event's stable identity. Anything not under ``/event/`` has
+        no usable identity and yields ''.
+        """
+        if not url:
+            return ""
+        parts = urlparse(url).path.strip("/").split("/")
+        if len(parts) >= 2 and parts[0] == "event" and parts[1]:
+            return parts[1]
+        return ""
 
     @staticmethod
     def _location(card) -> str | None:

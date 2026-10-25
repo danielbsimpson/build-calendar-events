@@ -73,6 +73,13 @@ scaffolding for everything in Milestone 0 already exists as stubs.
         confirm an updated event propagates in place and a removed event
         disappears without re-subscribing, color preserved. Deployment
         succeeding is not proof the bug is fixed.
+  - [x] **Stable UFC identity (release requirement from the ADR).** Fixed
+        2026-10-25: UFC `external_id` now derives from the event page URL slug
+        (e.g. `ufc-336`) instead of the headliner name, so a "TBD vs TBD" card
+        keeps its UID when the matchup is announced and updates in place
+        (SEQUENCE bump) rather than being replaced. Switching the scheme re-IDs
+        the 8 already-published UFC events once; the next publish shows them as
+        removed+added (F1's stable IDs are unaffected). Not yet published.
 - [x] Support unattended scheduled runs (monthly) — GitHub Actions `schedule`
       (accepts the 60-day inactivity shutdown; re-enable from the Actions tab).
 - [x] Runner: cron example + GitHub Actions workflow
