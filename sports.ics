@@ -8,89 +8,7 @@ BEGIN:VEVENT
 SEQUENCE:0
 COLOR:tomato
 CATEGORIES:Sports
-DTSTAMP:20261022T193654Z
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:
-TRIGGER:-P1D
-END:VALARM
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:
-TRIGGER:-PT30M
-END:VALARM
-DESCRIPTION:Moicano vs Nolan\n\n• Renato Moicano vs Tom Nolan - Lightweig
- ht\n• Randy Brown vs Carlos Leal - Welterweight\n• Yana Santos vs Luan
- a Santos - Women's Bantamweight\n• Jean-Paul Lebosnoyani vs Farman Hasan
- ov - Welterweight\n• Francis Marshall vs Gaston Bolanos - Featherweight\
- n• Azamat Bekoev vs Andre Petroski - Middleweight\n• Rodrigo Sezinando
-  vs Theodor Berggren - Welterweight\n• Julian Erosa vs JeongYeong Lee - 
- Featherweight\n• Nick Klein vs Joseph Kropschot - Middleweight\n• Tali
- ta Alencar vs Piera Rodriguez - Women's Strawweight\n• Lucia Szabova vs 
- Tainara Lisboa - Women's Flyweight\n\nVenue: Meta APEX\, Las Vegas\, NV Un
- ited States\n\nhttps://www.ufc.com/event/ufc-fight-night-october-31-2026
-DTEND:20261101T020000Z
-LOCATION:Meta APEX\, Las Vegas\, NV United States
-DTSTART:20261101T000000Z
-SUMMARY:🥊 UFC: Moicano vs Nolan
-UID:ufc-3837dc4acffe06ae@build-calendar-events
-END:VEVENT
-BEGIN:VEVENT
-SEQUENCE:0
-COLOR:tomato
-CATEGORIES:Sports
-DTSTAMP:20261022T193654Z
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:
-TRIGGER:-P1D
-END:VALARM
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:
-TRIGGER:-PT30M
-END:VALARM
-DESCRIPTION:Autódromo José Carlos Pace\nSão Paulo\, Brazil\n\nRace: Sun 
- 08 Nov 2026 17:00 UTC\nQualifying: Sat 07 Nov 2026 18:00 UTC\n\nhttps://en
- .wikipedia.org/wiki/2026_Brazilian_Grand_Prix
-DTEND:20261108T190000Z
-LOCATION:Autódromo José Carlos Pace\, São Paulo\, Brazil
-DTSTART:20261108T170000Z
-SUMMARY:🏎️ F1: Brazilian Grand Prix
-UID:f1-aace9e3a06ce3116@build-calendar-events
-END:VEVENT
-BEGIN:VEVENT
-SEQUENCE:0
-COLOR:tomato
-CATEGORIES:Sports
-DTSTAMP:20261022T193654Z
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:
-TRIGGER:-P1D
-END:VALARM
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:
-TRIGGER:-PT30M
-END:VALARM
-DESCRIPTION:Oliveira vs Lopes\n\n• Charles Oliveira vs Diego Lopes - Ligh
- tweight\n• Sergei Pavlovich vs Alex Pereira - Heavyweight\n• Brandon M
- oreno vs Charles Johnson - Flyweight\n• Quentin Pasley vs Junior Tafa - 
- Light Heavyweight\n• Joe Pyfer vs Bo Nickal - Middleweight\n\nVenue: T-M
- obile Arena\, Las Vegas\, NV United States\n\nhttps://www.ufc.com/event/uf
- c-335
-DTEND:20261213T040000Z
-LOCATION:T-Mobile Arena\, Las Vegas\, NV United States
-DTSTART:20261213T020000Z
-SUMMARY:🥊 UFC: Oliveira vs Lopes
-UID:ufc-456c60e0ae39ecfd@build-calendar-events
-END:VEVENT
-BEGIN:VEVENT
-SEQUENCE:0
-COLOR:tomato
-CATEGORIES:Sports
-DTSTAMP:20261022T193654Z
+DTSTAMP:20261025T132753Z
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:
@@ -106,13 +24,38 @@ DTEND:20270207T000000Z
 LOCATION:Afterpay Arena\, Sydney Olympic Park NSW Australia
 DTSTART:20270206T220000Z
 SUMMARY:🥊 UFC: TBD vs TBD
-UID:ufc-9ca5585c48114fb5@build-calendar-events
+UID:ufc-6024b102d63e5b48@build-calendar-events
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:1
+COLOR:tomato
+CATEGORIES:Sports
+DTSTAMP:20261025T132753Z
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER:-PT30M
+END:VALARM
+DESCRIPTION:Autódromo José Carlos Pace\nSão Paulo\, Brazil\n\nRace: Sun 
+ 08 Nov 2026 17:00 UTC\nQualifying: Sat 07 Nov 2026 18:00 UTC\n\nWeather: h
+ eavy drizzle\, 16–28°C\, precip 55%\n\nhttps://en.wikipedia.org/wiki/20
+ 26_Brazilian_Grand_Prix
+DTEND:20261108T190000Z
+LOCATION:Autódromo José Carlos Pace\, São Paulo\, Brazil
+DTSTART:20261108T170000Z
+SUMMARY:🏎️ F1: Brazilian Grand Prix
+UID:f1-aace9e3a06ce3116@build-calendar-events
 END:VEVENT
 BEGIN:VEVENT
 SEQUENCE:0
 COLOR:tomato
 CATEGORIES:Sports
-DTSTAMP:20261022T193654Z
+DTSTAMP:20261025T132753Z
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:
@@ -133,10 +76,10 @@ SUMMARY:🏎️ F1: Abu Dhabi Grand Prix
 UID:f1-bb20ef9f451df866@build-calendar-events
 END:VEVENT
 BEGIN:VEVENT
-SEQUENCE:0
+SEQUENCE:1
 COLOR:tomato
 CATEGORIES:Sports
-DTSTAMP:20261022T193654Z
+DTSTAMP:20261025T132753Z
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:
@@ -149,8 +92,8 @@ TRIGGER:-PT30M
 END:VALARM
 DESCRIPTION:Autódromo Hermanos Rodríguez\nMexico City\, Mexico\n\nRace: S
  un 01 Nov 2026 20:00 UTC\nQualifying: Sat 31 Oct 2026 21:00 UTC\n\nWeather
- : light drizzle\, 12–24°C\, precip 33%\n\nhttps://en.wikipedia.org/wiki
- /2026_Mexico_City_Grand_Prix
+ : fog\, 12–28°C\, precip 46%\n\nhttps://en.wikipedia.org/wiki/2026_Mexi
+ co_City_Grand_Prix
 DTEND:20261101T220000Z
 LOCATION:Autódromo Hermanos Rodríguez\, Mexico City\, Mexico
 DTSTART:20261101T200000Z
@@ -161,7 +104,7 @@ BEGIN:VEVENT
 SEQUENCE:0
 COLOR:tomato
 CATEGORIES:Sports
-DTSTAMP:20261022T193654Z
+DTSTAMP:20261025T132753Z
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:
@@ -185,175 +128,7 @@ BEGIN:VEVENT
 SEQUENCE:0
 COLOR:tomato
 CATEGORIES:Sports
-DTSTAMP:20261022T193654Z
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:
-TRIGGER:-P1D
-END:VALARM
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:
-TRIGGER:-PT30M
-END:VALARM
-DESCRIPTION:Prochazka vs Stirling\n\n• Jiří Procházka vs Navajo Stirli
- ng - Light Heavyweight\n• Aljamain Sterling vs Kevin Vallejos - Featherw
- eight\n• Dan Hooker vs Brian Ortega - Lightweight\n• Jared Cannonier v
- s Ikram Aliskerov - Middleweight\n• Shamil Gaziev vs Tallison Teixeira -
-  Heavyweight\n• Jake Matthews vs Tahir Abdullayev - Welterweight\n• Al
- eksandre Topuria vs Santiago Luna - Bantamweight\n• Asu Almabayev vs Kyo
- ji Horiguchi - Flyweight\n• Amir Albazi vs Alessandro Costa - Flyweight\
- n\nVenue: ABHA Arena\, Doha Qatar\n\nhttps://www.ufc.com/event/ufc-fight-n
- ight-november-21-2026
-DTEND:20261121T200000Z
-LOCATION:ABHA Arena\, Doha Qatar
-DTSTART:20261121T180000Z
-SUMMARY:🥊 UFC: Prochazka vs Stirling
-UID:ufc-d7c08519cd5a5682@build-calendar-events
-END:VEVENT
-BEGIN:VEVENT
-SEQUENCE:0
-COLOR:tomato
-CATEGORIES:Sports
-DTSTAMP:20261022T193654Z
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:
-TRIGGER:-P1D
-END:VALARM
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:
-TRIGGER:-PT30M
-END:VALARM
-DESCRIPTION:https://www.ufc.com/event/ufc-336
-DTEND:20270131T040000Z
-LOCATION:Scotiabank Arena\, Toronto ON Canada
-DTSTART:20270131T020000Z
-SUMMARY:🥊 UFC: TBD vs TBD
-UID:ufc-04195cddfbe1b738@build-calendar-events
-END:VEVENT
-BEGIN:VEVENT
-SEQUENCE:0
-COLOR:tomato
-CATEGORIES:Sports
-DTSTAMP:20261022T193654Z
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:
-TRIGGER:-P1D
-END:VALARM
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:
-TRIGGER:-PT30M
-END:VALARM
-DESCRIPTION:Volkanovski vs Evloev\n\n• Alexander Volkanovski vs Movsar Ev
- loev - Featherweight Title\n• Petr Yan vs Merab Dvalishvili - Bantamweig
- ht Title\n• Lone’er Kavanagh vs Ramazan Temirov - Flyweight\n• Alexa
- nder Volkov vs Rizvan Kuniev - Heavyweight\n• Aaron Pico vs Losene Keita
-  - Featherweight\n• Azamat Murzakanov vs Dominick Reyes - Light Heavywei
- ght\n• Nikita Krylov vs Abdul Rakhman Yakhyaev - Light Heavyweight\n• 
- Abus Magomedov vs Cam Rowston - Middleweight\n• Grant Dawson vs Nurullo 
- Aliev - Lightweight\n• Colby Thicknesse vs Asaf Chopurov - Bantamweight\
- n• Abubakar Vagaev vs Jacob Malkoun - Middleweight\n• Bolaji Oki vs Da
- niel Santos - Featherweight\n• Kody Steele vs Noah Gugnon - Lightweight\
- n• Iasmin Lucindo vs Nicolle Caliari - Women's Strawweight\n\nVenue: Eti
- had Arena\, Abu Dhabi United Arab Emirates\n\nhttps://www.ufc.com/event/uf
- c-333
-DTEND:20261024T200000Z
-LOCATION:Etihad Arena\, Abu Dhabi United Arab Emirates
-DTSTART:20261024T180000Z
-SUMMARY:🥊 UFC: Volkanovski vs Evloev
-UID:ufc-7a3a60465a42c806@build-calendar-events
-END:VEVENT
-BEGIN:VEVENT
-SEQUENCE:0
-COLOR:tomato
-CATEGORIES:Sports
-DTSTAMP:20261022T193654Z
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:
-TRIGGER:-P1D
-END:VALARM
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:
-TRIGGER:-PT30M
-END:VALARM
-DESCRIPTION:Bonfim vs Brady\n\n• Gabriel Bonfim vs Sean Brady - Welterwei
- ght\n• Tatiana Suarez vs Virna Jandiroba - Women's Strawweight\n• Dave
- y Grant vs Elijah Smith - Bantamweight\n• Seokhyeon Ko vs Wellington Tur
- man - Welterweight\n• Billy Elekana vs Lucas Fernando - Light Heavyweigh
- t\n• Mantas Kondratavičius vs Wes Schultz - Middleweight\n• Gabriel L
- orenco vs Alvin Hines - Heavyweight\n• Karine Silva vs Gabriella Fernand
- es - Women's Flyweight\n• Jose Delano vs Murtazali Magomedov - Featherwe
- ight\n• Keiichiro Nakamura vs Ollie Schmid - Featherweight\n• Austin B
- ashi vs Lucas Brennan - Featherweight\n• Priscila Cachoeira vs Nina Milo
- šević - Women's Bantamweight\n• Jonny Parsons vs José Souza - Welterw
- eight\n\nVenue: Meta APEX\, Las Vegas\, NV United States\n\nhttps://www.uf
- c.com/event/ufc-fight-night-november-07-2026
-DTEND:20261108T030000Z
-LOCATION:Meta APEX\, Las Vegas\, NV United States
-DTSTART:20261108T010000Z
-SUMMARY:🥊 UFC: Bonfim vs Brady
-UID:ufc-a66aa9d0fca04536@build-calendar-events
-END:VEVENT
-BEGIN:VEVENT
-SEQUENCE:0
-COLOR:tomato
-CATEGORIES:Sports
-DTSTAMP:20261022T193654Z
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:
-TRIGGER:-P1D
-END:VALARM
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:
-TRIGGER:-PT30M
-END:VALARM
-DESCRIPTION:Circuit of the Americas\nAustin\, USA\n\nRace: Sun 25 Oct 2026 
- 20:00 UTC\nQualifying: Sat 24 Oct 2026 21:00 UTC\n\nWeather: overcast\, 17
- –27°C\, precip 0%\n\nhttps://en.wikipedia.org/wiki/2026_United_States_G
- rand_Prix
-DTEND:20261025T220000Z
-LOCATION:Circuit of the Americas\, Austin\, USA
-DTSTART:20261025T200000Z
-SUMMARY:🏎️ F1: United States Grand Prix
-UID:f1-65e5a004a25d1ab6@build-calendar-events
-END:VEVENT
-BEGIN:VEVENT
-SEQUENCE:0
-COLOR:tomato
-CATEGORIES:Sports
-DTSTAMP:20261022T193654Z
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:
-TRIGGER:-P1D
-END:VALARM
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:
-TRIGGER:-PT30M
-END:VALARM
-DESCRIPTION:Las Vegas Strip Street Circuit\nLas Vegas\, USA\n\nRace: Sun 22
-  Nov 2026 04:00 UTC\nQualifying: Sat 21 Nov 2026 04:00 UTC\n\nhttps://en.w
- ikipedia.org/wiki/2026_Las_Vegas_Grand_Prix
-DTEND:20261122T060000Z
-LOCATION:Las Vegas Strip Street Circuit\, Las Vegas\, USA
-DTSTART:20261122T040000Z
-SUMMARY:🏎️ F1: Las Vegas Grand Prix
-UID:f1-7e177e3d51a22fb5@build-calendar-events
-END:VEVENT
-BEGIN:VEVENT
-SEQUENCE:0
-COLOR:tomato
-CATEGORIES:Sports
-DTSTAMP:20261022T193654Z
+DTSTAMP:20261025T132753Z
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:
@@ -379,6 +154,223 @@ DTEND:20261115T040000Z
 LOCATION:Madison Square Garden\, New York\, NY United States
 DTSTART:20261115T020000Z
 SUMMARY:🥊 UFC: Gane vs Hokit
-UID:ufc-d827561f51cf60f0@build-calendar-events
+UID:ufc-2438c26f3dd151e2@build-calendar-events
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+COLOR:tomato
+CATEGORIES:Sports
+DTSTAMP:20261025T132753Z
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER:-PT30M
+END:VALARM
+DESCRIPTION:https://www.ufc.com/event/ufc-fight-night-january-16-2027
+DTEND:20270117T030000Z
+LOCATION:American Airlines Center\, Dallas\, TX United States
+DTSTART:20270117T010000Z
+SUMMARY:🥊 UFC: TBD vs TBD
+UID:ufc-8331963d8f29858d@build-calendar-events
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+COLOR:tomato
+CATEGORIES:Sports
+DTSTAMP:20261025T132753Z
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER:-PT30M
+END:VALARM
+DESCRIPTION:Bonfim vs Brady\n\n• Gabriel Bonfim vs Sean Brady - Welterwei
+ ght\n• Tatiana Suarez vs Virna Jandiroba - Women's Strawweight\n• Dave
+ y Grant vs Elijah Smith - Bantamweight\n• Seokhyeon Ko vs Wellington Tur
+ man - Welterweight\n• Mantas Kondratavičius vs Andre Petroski - Middlew
+ eight\n• Billy Elekana vs Lucas Fernando - Light Heavyweight\n• Gabrie
+ l Lorenco vs Alvin Hines - Heavyweight\n• Karine Silva vs Gabriella Fern
+ andes - Women's Flyweight\n• Jose Delano vs Murtazali Magomedov - Feathe
+ rweight\n• Keiichiro Nakamura vs Ollie Schmid - Featherweight\n• Austi
+ n Bashi vs Lucas Brennan - Featherweight\n• Priscila Cachoeira vs Nina M
+ ilošević - Women's Bantamweight\n• Jonny Parsons vs José Souza - Welt
+ erweight\n\nVenue: Meta APEX\, Las Vegas\, NV United States\n\nhttps://www
+ .ufc.com/event/ufc-fight-night-november-07-2026
+DTEND:20261108T030000Z
+LOCATION:Meta APEX\, Las Vegas\, NV United States
+DTSTART:20261108T010000Z
+SUMMARY:🥊 UFC: Bonfim vs Brady
+UID:ufc-0d967e6450c212a8@build-calendar-events
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:1
+COLOR:tomato
+CATEGORIES:Sports
+DTSTAMP:20261025T132753Z
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER:-PT30M
+END:VALARM
+DESCRIPTION:Circuit of the Americas\nAustin\, USA\n\nRace: Sun 25 Oct 2026 
+ 20:00 UTC\nQualifying: Sat 24 Oct 2026 21:00 UTC\n\nWeather: overcast\, 16
+ –28°C\, precip 0%\n\nhttps://en.wikipedia.org/wiki/2026_United_States_G
+ rand_Prix
+DTEND:20261025T220000Z
+LOCATION:Circuit of the Americas\, Austin\, USA
+DTSTART:20261025T200000Z
+SUMMARY:🏎️ F1: United States Grand Prix
+UID:f1-65e5a004a25d1ab6@build-calendar-events
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+COLOR:tomato
+CATEGORIES:Sports
+DTSTAMP:20261025T132753Z
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER:-PT30M
+END:VALARM
+DESCRIPTION:Prochazka vs Stirling\n\n• Jiří Procházka vs Navajo Stirli
+ ng - Light Heavyweight\n• Aljamain Sterling vs Kevin Vallejos - Featherw
+ eight\n• Dan Hooker vs Brian Ortega - Lightweight\n• Jared Cannonier v
+ s Ikram Aliskerov - Middleweight\n• Shamil Gaziev vs Tallison Teixeira -
+  Heavyweight\n• Jake Matthews vs Tahir Abdullayev - Welterweight\n• Al
+ eksandre Topuria vs Santiago Luna - Bantamweight\n• Asu Almabayev vs Kyo
+ ji Horiguchi - Flyweight\n• Amir Albazi vs Alessandro Costa - Flyweight\
+ n\nVenue: ABHA Arena\, Doha Qatar\n\nhttps://www.ufc.com/event/ufc-fight-n
+ ight-november-21-2026
+DTEND:20261121T200000Z
+LOCATION:ABHA Arena\, Doha Qatar
+DTSTART:20261121T180000Z
+SUMMARY:🥊 UFC: Prochazka vs Stirling
+UID:ufc-cadc533a84c0050d@build-calendar-events
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+COLOR:tomato
+CATEGORIES:Sports
+DTSTAMP:20261025T132753Z
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER:-PT30M
+END:VALARM
+DESCRIPTION:Las Vegas Strip Street Circuit\nLas Vegas\, USA\n\nRace: Sun 22
+  Nov 2026 04:00 UTC\nQualifying: Sat 21 Nov 2026 04:00 UTC\n\nhttps://en.w
+ ikipedia.org/wiki/2026_Las_Vegas_Grand_Prix
+DTEND:20261122T060000Z
+LOCATION:Las Vegas Strip Street Circuit\, Las Vegas\, USA
+DTSTART:20261122T040000Z
+SUMMARY:🏎️ F1: Las Vegas Grand Prix
+UID:f1-7e177e3d51a22fb5@build-calendar-events
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+COLOR:tomato
+CATEGORIES:Sports
+DTSTAMP:20261025T132753Z
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER:-PT30M
+END:VALARM
+DESCRIPTION:Oliveira vs Lopes\n\n• Charles Oliveira vs Diego Lopes - Ligh
+ tweight\n• Sergei Pavlovich vs Alex Pereira - Heavyweight\n• Brandon M
+ oreno vs Charles Johnson - Flyweight\n• Quentin Pasley vs Junior Tafa - 
+ Light Heavyweight\n• Joe Pyfer vs Bo Nickal - Middleweight\n\nVenue: T-M
+ obile Arena\, Las Vegas\, NV United States\n\nhttps://www.ufc.com/event/uf
+ c-335
+DTEND:20261213T040000Z
+LOCATION:T-Mobile Arena\, Las Vegas\, NV United States
+DTSTART:20261213T020000Z
+SUMMARY:🥊 UFC: Oliveira vs Lopes
+UID:ufc-fbbf2fd01efc792b@build-calendar-events
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+COLOR:tomato
+CATEGORIES:Sports
+DTSTAMP:20261025T132753Z
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER:-PT30M
+END:VALARM
+DESCRIPTION:Van vs Kape\n\n• Joshua Van vs Manel Kape\n• Carlos Prates 
+ vs Michael Morales\n\nVenue: Scotiabank Arena\, Toronto ON Canada\n\nhttps
+ ://www.ufc.com/event/ufc-336
+DTEND:20270131T040000Z
+LOCATION:Scotiabank Arena\, Toronto ON Canada
+DTSTART:20270131T020000Z
+SUMMARY:🥊 UFC: Van vs Kape
+UID:ufc-c346c24883bcd9a5@build-calendar-events
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+COLOR:tomato
+CATEGORIES:Sports
+DTSTAMP:20261025T132753Z
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER:-PT30M
+END:VALARM
+DESCRIPTION:Moicano vs Nolan\n\n• Renato Moicano vs Tom Nolan - Lightweig
+ ht\n• Randy Brown vs Jacobe Smith - Welterweight\n• Yana Santos vs Lua
+ na Santos - Women's Bantamweight\n• Ode' Osbourne vs Cody Durden - Flywe
+ ight\n• Zachary Reese vs Mickey Gall - Middleweight\n• Jean-Paul Lebos
+ noyani vs Farman Hasanov - Welterweight\n• Francis Marshall vs Dakota Ho
+ pe - Featherweight\n• Rodrigo Sezinando vs Theodor Berggren - Welterweig
+ ht\n• Julian Erosa vs JeongYeong Lee - Featherweight\n• Nick Klein vs 
+ Joseph Kropschot - Middleweight\n• Talita Alencar vs Piera Rodriguez - W
+ omen's Strawweight\n• Lucia Szabova vs Tainara Lisboa - Women's Flyweigh
+ t\n\nVenue: Meta APEX\, Las Vegas\, NV United States\n\nhttps://www.ufc.co
+ m/event/ufc-fight-night-october-31-2026
+DTEND:20261101T020000Z
+LOCATION:Meta APEX\, Las Vegas\, NV United States
+DTSTART:20261101T000000Z
+SUMMARY:🥊 UFC: Moicano vs Nolan
+UID:ufc-dcb3fb537ada3210@build-calendar-events
 END:VEVENT
 END:VCALENDAR
