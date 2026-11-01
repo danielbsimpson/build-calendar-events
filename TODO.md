@@ -66,13 +66,27 @@ scaffolding for everything in Milestone 0 already exists as stubs.
       the calendar can be colored on-device — combined F1 + UFC feed built by
       `python main.py feed` ([src/calendar_events/feed.py](src/calendar_events/feed.py)),
       hosted on GitHub Pages.
-  - [ ] **BUG-001 stays open until Stage 4 is verified on an actual iPhone.**
+  - [ ] **BUG-001 / Stage 4 — iOS subscription refresh is the open risk.**
         Verified on-device 2026-10-22: subscribed to the hosted HTTPS feed,
-        chose a calendar color, and the colored F1 + UFC events added reliably
-        with no Accept / "Add All" step (Stages 1-3). Still pending (Stage 4):
-        confirm an updated event propagates in place and a removed event
-        disappears without re-subscribing, color preserved. Deployment
-        succeeding is not proof the bug is fixed.
+        chose a color, and the colored F1 + UFC events added reliably with no
+        Accept / "Add All" step (Stages 1-3) — the core add+color problem is
+        solved. **Stage 4 not yet demonstrated:** after the 2026-10-25 "Van vs
+        Kape" update went live, an iPhone subscription still showed the stale
+        "TBD vs TBD" 9 days later (as of 2026-11-01) despite Fetch New Data set
+        to 15 min. The feed itself was correct throughout (verified via the
+        hosted URL). Root cause is iOS/iCloud subscribed-calendar refresh, which
+        is client-controlled and, for iCloud-stored subscriptions, refreshed
+        server-side on an opaque, often multi-day schedule not governed by the
+        device Fetch setting.
+        - Mitigation shipped 2026-11-01: feed now advertises
+          `REFRESH-INTERVAL`/`X-PUBLISHED-TTL` (`feed_refresh_interval`, default
+          `PT12H`) so clients are told how often to re-poll. This is a hint, not
+          a guarantee, and may not un-stick an already-stale subscription.
+        - Still to confirm: whether re-subscribing (and/or storing the
+          subscription locally rather than in iCloud) yields acceptable refresh
+          latency, and record the observed latency. If iOS refresh stays
+          unacceptable, revisit the ADR (e.g. push/CalDAV delivery) rather than
+          treat a plain subscribed .ics as a solved refresh path.
   - [x] **Stable UFC identity (release requirement from the ADR).** Fixed
         and published 2026-10-25: UFC `external_id` now derives from the event
         page URL slug (e.g. `ufc-336`) instead of the headliner name, so a
