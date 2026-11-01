@@ -42,6 +42,22 @@ def test_feed_has_calendar_name_and_no_method():
     assert "METHOD:" not in text
 
 
+def test_feed_publishes_refresh_interval_hint():
+    text = serialize_calendar(
+        build_feed_calendar([_event("Race One", "e1")], refresh_interval="PT12H")
+    )
+    # RFC 7986 property plus the widely-honored Apple/Google X- equivalent, so
+    # subscribed clients are told how often to re-poll instead of guessing.
+    assert "REFRESH-INTERVAL;VALUE=DURATION:PT12H" in text
+    assert "X-PUBLISHED-TTL:PT12H" in text
+
+
+def test_feed_omits_refresh_interval_when_unset():
+    text = serialize_calendar(build_feed_calendar([_event("Race One", "e1")]))
+    assert "REFRESH-INTERVAL" not in text
+    assert "X-PUBLISHED-TTL" not in text
+
+
 def test_feed_applies_per_event_sequence():
     e1 = _event("Race One", "e1")
     e2 = _event("Fight Two", "e2")

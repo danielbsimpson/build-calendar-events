@@ -33,6 +33,10 @@ store_file: data/sent_events.json
 calendar_name: Sports
 feed_file: public/sports.ics
 feed_state_file: data/feed_state.json
+# How often subscribed clients are asked to re-poll the feed (iCalendar
+# DURATION). Advertised via REFRESH-INTERVAL + X-PUBLISHED-TTL. Note that
+# clients (iOS especially) treat this as a hint and may refresh less often.
+feed_refresh_interval: PT12H
 
 # Email delivery settings. Username/password come from environment variables
 # (SMTP_USERNAME / SMTP_PASSWORD) so they are never committed.

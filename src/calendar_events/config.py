@@ -46,6 +46,7 @@ class Config:
     feed_file: Path = Path("public/sports.ics")
     feed_state_file: Path = Path("data/feed_state.json")
     calendar_name: str = "Sports"
+    feed_refresh_interval: str = "PT12H"
     email: EmailConfig = field(default_factory=EmailConfig)
     source_options: dict = field(default_factory=dict)
     default_alarms: tuple[int, ...] = (60,)
@@ -106,6 +107,7 @@ def load_config(path: str | Path = "config.yaml") -> Config:
         feed_file=Path(raw.get("feed_file", "public/sports.ics")),
         feed_state_file=Path(raw.get("feed_state_file", "data/feed_state.json")),
         calendar_name=str(raw.get("calendar_name", "Sports")),
+        feed_refresh_interval=str(raw.get("feed_refresh_interval", "PT12H")),
         email=email,
         source_options=raw.get("source_options", {}) or {},
         default_alarms=tuple(raw.get("default_alarms", [60]) or ()),

@@ -117,6 +117,7 @@ def build_feed_calendar(
     sequences: dict[str, int] | None = None,
     color: str | None = None,
     calendar_name: str | None = None,
+    refresh_interval: str | None = None,
 ) -> Calendar:
     """Build a multi-event iCalendar collection for a subscription feed.
 
@@ -124,6 +125,10 @@ def build_feed_calendar(
     calendar is a published collection, not an invitation. ``sequences`` maps an
     event UID to the SEQUENCE to publish (defaulting to 0) so an updated event
     supersedes the subscriber's existing copy instead of duplicating it.
+
+    ``refresh_interval`` is an iCalendar DURATION (e.g. ``"PT12H"``) advertising
+    how often clients should re-poll the feed. Without it, subscribed calendars
+    fall back to their own (often very slow) default refresh cadence.
     """
     sequences = sequences or {}
     cal = Calendar()
@@ -132,6 +137,20 @@ def build_feed_calendar(
         # NAME is its RFC 7986 standard counterpart.
         cal.extra.append(ContentLine(name="X-WR-CALNAME", value=calendar_name))
         cal.extra.append(ContentLine(name="NAME", value=calendar_name))
+    if refresh_interval:
+        # RFC 7986 REFRESH-INTERVAL (needs VALUE=DURATION) plus the de-facto
+        # X-PUBLISHED-TTL that Apple Calendar and Google honor, so subscribers
+        # re-poll on this cadence instead of an opaque client default.
+        cal.extra.append(
+            ContentLine(
+                name="REFRESH-INTERVAL",
+                params={"VALUE": ["DURATION"]},
+                value=refresh_interval,
+            )
+        )
+        cal.extra.append(
+            ContentLine(name="X-PUBLISHED-TTL", value=refresh_interval)
+        )
     if color:
         cal.extra.append(ContentLine(name="COLOR", value=color))
     for event in events:

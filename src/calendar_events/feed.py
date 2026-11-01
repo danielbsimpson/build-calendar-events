@@ -119,6 +119,7 @@ def build_feed(
         sequences=sequences,
         color=config.event_color,
         calendar_name=config.calendar_name,
+        refresh_interval=config.feed_refresh_interval,
     )
     result.ics = serialize_calendar(calendar)
     result.total = len(collection)
