@@ -5,10 +5,10 @@
       "title": "\ud83c\udfce\ufe0f F1: Mexico City Grand Prix",
       "start": "2026-11-01T20:00:00+00:00",
       "source": "f1",
-      "content_hash": "16c9d344257bad6dd97114002f87580d666cabed",
-      "sequence": 2,
+      "content_hash": "85bcbe528c4ba5cda0a3abbba641aa3a2630b1d7",
+      "sequence": 3,
       "first_seen": "2026-10-22T19:36:54.146735+00:00",
-      "last_seen": "2026-11-01T07:20:24.046908+00:00"
+      "last_seen": "2026-11-01T15:11:01.697436+00:00"
     },
     "ufc-0d967e6450c212a8@build-calendar-events": {
       "title": "\ud83e\udd4a UFC: Cortes Acosta vs Walker",
@@ -17,16 +17,16 @@
       "content_hash": "f5385abd09267a2f744e8613a628bcb98de4a7c6",
       "sequence": 1,
       "first_seen": "2026-10-25T13:27:53.636389+00:00",
-      "last_seen": "2026-11-01T07:20:24.046908+00:00"
+      "last_seen": "2026-11-01T15:11:01.697436+00:00"
     },
     "f1-aace9e3a06ce3116@build-calendar-events": {
       "title": "\ud83c\udfce\ufe0f F1: Brazilian Grand Prix",
       "start": "2026-11-08T17:00:00+00:00",
       "source": "f1",
-      "content_hash": "04b63f651382a361bb5adb3995fb53e2ee57bcba",
-      "sequence": 2,
+      "content_hash": "569aec07c2f1cc4266d526ce592f4717c96fb80c",
+      "sequence": 3,
       "first_seen": "2026-10-22T19:36:54.146735+00:00",
-      "last_seen": "2026-11-01T07:20:24.046908+00:00"
+      "last_seen": "2026-11-01T15:11:01.697436+00:00"
     },
     "ufc-2438c26f3dd151e2@build-calendar-events": {
       "title": "\ud83e\udd4a UFC: Gane vs Hokit",
@@ -35,7 +35,7 @@
       "content_hash": "7677eb8f736be1f5b1301979f665ab665c880188",
       "sequence": 1,
       "first_seen": "2026-10-25T13:27:53.636389+00:00",
-      "last_seen": "2026-11-01T07:20:24.046908+00:00"
+      "last_seen": "2026-11-01T15:11:01.697436+00:00"
     },
     "ufc-cadc533a84c0050d@build-calendar-events": {
       "title": "\ud83e\udd4a UFC: Prochazka vs Stirling",
@@ -44,7 +44,7 @@
       "content_hash": "71b0771eaf510d5cfac743af34726883e307b7be",
       "sequence": 0,
       "first_seen": "2026-10-25T13:27:53.636389+00:00",
-      "last_seen": "2026-11-01T07:20:24.046908+00:00"
+      "last_seen": "2026-11-01T15:11:01.697436+00:00"
     },
     "f1-7e177e3d51a22fb5@build-calendar-events": {
       "title": "\ud83c\udfce\ufe0f F1: Las Vegas Grand Prix",
@@ -53,7 +53,7 @@
       "content_hash": "3b0c03add485e4e7d4d8b78ada84a13b222e4243",
       "sequence": 0,
       "first_seen": "2026-10-22T19:36:54.146735+00:00",
-      "last_seen": "2026-11-01T07:20:24.046908+00:00"
+      "last_seen": "2026-11-01T15:11:01.697436+00:00"
     },
     "f1-4976c6bc96b7d367@build-calendar-events": {
       "title": "\ud83c\udfce\ufe0f F1: Qatar Grand Prix",
@@ -62,7 +62,7 @@
       "content_hash": "cee5ab8e0be53ca2b5de166890e4584235c08e68",
       "sequence": 0,
       "first_seen": "2026-10-22T19:36:54.146735+00:00",
-      "last_seen": "2026-11-01T07:20:24.046908+00:00"
+      "last_seen": "2026-11-01T15:11:01.697436+00:00"
     },
     "f1-bb20ef9f451df866@build-calendar-events": {
       "title": "\ud83c\udfce\ufe0f F1: Abu Dhabi Grand Prix",
@@ -71,7 +71,7 @@
       "content_hash": "f4b046b23901784fc70c11f701dad2ba5de1829a",
       "sequence": 0,
       "first_seen": "2026-10-22T19:36:54.146735+00:00",
-      "last_seen": "2026-11-01T07:20:24.046908+00:00"
+      "last_seen": "2026-11-01T15:11:01.697436+00:00"
     },
     "ufc-fbbf2fd01efc792b@build-calendar-events": {
       "title": "\ud83e\udd4a UFC: Oliveira vs Lopes",
@@ -80,7 +80,7 @@
       "content_hash": "e810a7f6937dd4d946d9b1f1f56a2034e0c89321",
       "sequence": 0,
       "first_seen": "2026-10-25T13:27:53.636389+00:00",
-      "last_seen": "2026-11-01T07:20:24.046908+00:00"
+      "last_seen": "2026-11-01T15:11:01.697436+00:00"
     },
     "ufc-8331963d8f29858d@build-calendar-events": {
       "title": "\ud83e\udd4a UFC: TBD vs TBD",
@@ -89,7 +89,7 @@
       "content_hash": "92a81c0059f74c51702cda0a19e37b8c39a3b539",
       "sequence": 0,
       "first_seen": "2026-10-25T13:27:53.636389+00:00",
-      "last_seen": "2026-11-01T07:20:24.046908+00:00"
+      "last_seen": "2026-11-01T15:11:01.697436+00:00"
     },
     "ufc-c346c24883bcd9a5@build-calendar-events": {
       "title": "\ud83e\udd4a UFC: Van vs Kape",
@@ -98,7 +98,7 @@
       "content_hash": "60b8caa60072c5b71c1d1a985ebd228349db73f1",
       "sequence": 1,
       "first_seen": "2026-10-25T13:27:53.636389+00:00",
-      "last_seen": "2026-11-01T07:20:24.046908+00:00"
+      "last_seen": "2026-11-01T15:11:01.697436+00:00"
     },
     "ufc-6024b102d63e5b48@build-calendar-events": {
       "title": "\ud83e\udd4a UFC: TBD vs TBD",
@@ -107,7 +107,7 @@
       "content_hash": "a391f8dccf1b83be0107caaebb186ea8a2eb4a9d",
       "sequence": 0,
       "first_seen": "2026-10-25T13:27:53.636389+00:00",
-      "last_seen": "2026-11-01T07:20:24.046908+00:00"
+      "last_seen": "2026-11-01T15:11:01.697436+00:00"
     }
   }
 }
