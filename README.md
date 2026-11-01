@@ -8,6 +8,12 @@ It ships with support for **UFC events** and **Formula 1 races**, and is designe
 so that new event sources (boxing, Champions League, NFL, etc.) can be added with
 minimal effort.
 
+> **📅 Live feed URL (subscribe in your calendar app):**
+> `https://danielbsimpson.github.io/build-calendar-events/sports.ics`
+>
+> See [Subscription feed](#subscription-feed) for how to subscribe on iPhone,
+> Google Calendar, and Outlook.
+
 ---
 
 ## How it works
@@ -145,11 +151,13 @@ rebuilds and publishes the feed to GitHub Pages monthly (and on demand via
 2. **Settings → Pages → Build and deployment → Source: "GitHub Actions"**.
 3. Trigger the workflow once (**Actions → Publish sports feed → Run workflow**).
 
-The feed is then served at a stable HTTPS URL:
+The feed is then served at a stable HTTPS URL. For this repository that is:
 
 ```
-https://<your-user>.github.io/<repo>/sports.ics
+https://danielbsimpson.github.io/build-calendar-events/sports.ics
 ```
+
+(In a fork it follows the pattern `https://<your-user>.github.io/<repo>/sports.ics`.)
 
 Durable state (UIDs/`SEQUENCE`) and the published `.ics` are committed to a
 dedicated **`feed-state`** branch so updates stay stable across runs; the
@@ -168,6 +176,16 @@ corrections flow from the feed rather than from editing events on the device.
 address is the HTTPS URL.) After verifying the subscription, remove or hide any
 old sports events you previously imported — the feed cannot delete copies that
 already live in your other calendars.
+
+> **Refresh tip:** when iOS asks which **Account** to save the subscription
+> under, prefer **"On My iPhone"** over **iCloud**. iCloud refreshes external
+> subscriptions server-side on an opaque, often multi-day schedule that the
+> device's *Settings → Calendar → Accounts → Fetch New Data* interval does
+> **not** control; a locally-stored subscription honours that Fetch interval.
+> The feed advertises a `REFRESH-INTERVAL`/`X-PUBLISHED-TTL` hint
+> (`feed_refresh_interval`, default `PT12H`), but clients treat it as a hint
+> only. If an existing subscription appears stuck on stale data, delete and
+> re-add it.
 
 Google Calendar and Outlook can also subscribe by URL (not one-time *import*),
 but refresh timing is controlled by each client and is not certified here.
